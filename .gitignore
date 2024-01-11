@@ -3,3 +3,5 @@ WikY/bin/
 WikY/obj/
 WikY.Entities/bin/
 WikY.Entities/obj/
+WikY.Repositories.Contracts/bin/
+WikY.Repositories.Contracts/obj/
