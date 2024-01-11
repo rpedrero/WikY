@@ -3,3 +3,11 @@ WikY/bin/
 WikY/obj/
 WikY.Entities/bin/
 WikY.Entities/obj/
+WikY.Repositories.Contracts/bin/
+WikY.Repositories.Contracts/obj/
+WikY.Repositories/bin/
+WikY.Repositories/obj/
+WikY.Business.Contracts/bin/
+WikY.Business.Contracts/obj/
+WikY.Business/bin/
+WikY.Business/obj/
