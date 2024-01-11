@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WikY.Business.Contracts\WikY.Business.Contracts.csproj" />
+    <ProjectReference Include="..\WikY.Repositories.Contracts\WikY.Repositories.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

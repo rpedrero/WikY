@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
+using WikY.Business;
+using WikY.Business.Contracts;
 using WikY.Entities;
+using WikY.Repositories;
+using WikY.Repositories.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews(); ;
 builder.Services.AddDbContext<WikYContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("WikYContextCS")));
+builder.Services.AddTransient<IArticleRepository, ArticleDbRepository>();
+builder.Services.AddTransient<ICommentRepository, CommentDbRepository>();
+builder.Services.AddTransient<IArticleBusiness, ArticleBusiness>();
+builder.Services.AddTransient<ICommentBusiness, CommentBusiness>();
 
 var app = builder.Build();
 

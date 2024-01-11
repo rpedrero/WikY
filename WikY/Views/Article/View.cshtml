@@ -1,0 +1,9 @@
+﻿@model ArticleViewModel
+
+<h1>@Model.Topic</h1>
+<p>Created on @Model.DateCreated.ToShortDateString() at @Model.DateCreated.ToShortTimeString() by @Model.Author</p>
+<p>Last modification: @Model.DateModified.ToShortDateString() at @Model.DateModified.ToShortTimeString()</p>
+<hr />
+<p>
+    @Model.Content
+</p>
