@@ -1,0 +1,26 @@
+﻿@model ICollection<ArticleViewModel>
+
+@{
+}
+
+<table>
+    <thead>
+        <tr>
+            <th>Topic</th>
+            <th>Author</th>
+            <th>Created on</th>
+            <th>Last modified on</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ArticleViewModel article in Model)
+        {
+            <tr>
+                <td>@article.Topic</td>
+                <td>@article.Author</td>
+                <td>@article.DateCreated.ToShortDateString() at @article.DateCreated.ToShortTimeString()</td>
+                <td>@article.DateModified.ToShortDateString() at @article.DateModified.ToShortTimeString()</td>
+            </tr>
+        }
+    </tbody>
+</table>

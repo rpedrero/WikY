@@ -3,7 +3,7 @@ using WikY.Entities;
 
 namespace WikY.Models
 {
-    public class ArticleViewModel
+    public class ArticleViewModel : Article
     {
         private Article _article;
 
