@@ -1,0 +1,31 @@
+﻿@model ArticleViewModel
+
+@{
+}
+
+<form asp-action="Create">
+    <p>
+        <label asp-for="Author">
+            <span>Author</span>
+            <span aria-label="required">*</span>
+        </label>
+        <input asp-for="Author" id="author-input" />
+    </p>
+    <p>
+        <label asp-for="Topic">
+            <span>Topic</span>
+            <span aria-label="required">*</span>
+        </label>
+        <input asp-for="Topic" id="topic-input" />
+    </p>
+    <p>
+        <label asp-for="Content">
+            <span>Content</span>
+            <span aria-label="required">*</span>
+        </label>
+        <textarea asp-for="Content" id="content-input"></textarea>
+    </p>
+    <p>
+        <button type="submit" id="submit-button">Submit</button>
+    </p>
+</form>

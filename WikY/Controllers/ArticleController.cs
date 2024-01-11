@@ -43,5 +43,10 @@ namespace WikY.Controllers
 
             return View(new ArticleViewModel(article));
         }
+
+        public async Task<IActionResult> Create()
+        {
+            return View();
+        }
     }
 }
