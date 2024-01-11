@@ -31,5 +31,10 @@ namespace WikY.Business
                 throw new ArticleNotFoundException(id); 
             }
         }
+
+        public async Task<bool> ExistsArticleWithTopic(string topic)
+        {
+            return (await _articleRepository.GetByTopic(topic)) is not null;
+        }
     }
 }

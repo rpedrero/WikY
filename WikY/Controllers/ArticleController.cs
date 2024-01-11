@@ -48,5 +48,10 @@ namespace WikY.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> CheckTopicUnicity(string topic)
+        {
+            return Json(!await _articleBusiness.ExistsArticleWithTopic(topic));
+        }
     }
 }
