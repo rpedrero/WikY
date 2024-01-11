@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WikY.Business.Contracts\WikY.Business.Contracts.csproj" />
+    <ProjectReference Include="..\WikY.Business\WikY.Business.csproj" />
     <ProjectReference Include="..\WikY.Entities\WikY.Entities.csproj" />
+    <ProjectReference Include="..\WikY.Repositories.Contracts\WikY.Repositories.Contracts.csproj" />
+    <ProjectReference Include="..\WikY.Repositories\WikY.Repositories.csproj" />
   </ItemGroup>
 
 </Project>
