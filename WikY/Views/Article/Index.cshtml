@@ -16,7 +16,7 @@
         @foreach (ArticleViewModel article in Model)
         {
             <tr>
-                <td>@article.Topic</td>
+                <td><a asp-action="View" asp-route-id="@article.Id">@article.Topic</a></td>
                 <td>@article.Author</td>
                 <td>@article.DateCreated.ToShortDateString() at @article.DateCreated.ToShortTimeString()</td>
                 <td>@article.DateModified.ToShortDateString() at @article.DateModified.ToShortTimeString()</td>
