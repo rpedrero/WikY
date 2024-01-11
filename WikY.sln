@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikY.Repositories.Contracts
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikY.Repositories", "WikY.Repositories\WikY.Repositories.csproj", "{B4443AA9-026D-4CAE-8D74-AAAB53E86771}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikY.Business.Contracts", "WikY.Business.Contracts\WikY.Business.Contracts.csproj", "{A236D4D4-E8F4-4FBC-B887-3B3D8E24D335}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WikY.Business", "WikY.Business\WikY.Business.csproj", "{04793E57-FE0C-42AA-8286-42F15BB107DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{B4443AA9-026D-4CAE-8D74-AAAB53E86771}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4443AA9-026D-4CAE-8D74-AAAB53E86771}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4443AA9-026D-4CAE-8D74-AAAB53E86771}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A236D4D4-E8F4-4FBC-B887-3B3D8E24D335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A236D4D4-E8F4-4FBC-B887-3B3D8E24D335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A236D4D4-E8F4-4FBC-B887-3B3D8E24D335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A236D4D4-E8F4-4FBC-B887-3B3D8E24D335}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04793E57-FE0C-42AA-8286-42F15BB107DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04793E57-FE0C-42AA-8286-42F15BB107DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04793E57-FE0C-42AA-8286-42F15BB107DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04793E57-FE0C-42AA-8286-42F15BB107DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
