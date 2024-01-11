@@ -7,7 +7,7 @@ namespace WikY.Repositories
     public class DbRepository<T, ID> : IRepository<T, ID> where T : class
     {
         private readonly WikYContext _context;
-        
+
         protected readonly DbSet<T> _dbSet;
 
         public DbRepository(WikYContext dbContext)
@@ -16,7 +16,7 @@ namespace WikY.Repositories
 
             _dbSet = _context.Set<T>();
         }
-        
+
         public async Task<T> Create(T entity)
         {
             await _dbSet.AddAsync(entity);
@@ -33,7 +33,7 @@ namespace WikY.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IAsyncEnumerable<T>> GetAll()
+        public IAsyncEnumerable<T> GetAll()
         {
             return _dbSet.AsAsyncEnumerable();
         }
