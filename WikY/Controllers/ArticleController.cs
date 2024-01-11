@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WikY.Business.Contracts;
+using WikY.Business.Exceptions;
 using WikY.Entities;
 using WikY.Models;
 
@@ -25,6 +26,22 @@ namespace WikY.Controllers
             }
 
             return View(articlesViewModels);
+        }
+
+        public async Task<IActionResult> View(int id)
+        {
+            Article article;
+
+            try
+            {
+                article = await _articleBusiness.GetArticleById(id);
+            }
+            catch (ArticleNotFoundException)
+            {
+                return NotFound();
+            }
+
+            return View(new ArticleViewModel(article));
         }
     }
 }
