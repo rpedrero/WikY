@@ -9,5 +9,6 @@ namespace WikY.Repositories.Contracts
 {
     public interface IArticleRepository : IRepository<Article, int>
     {
+        public Task<Article?> GetByTopic(string topic);
     }
 }

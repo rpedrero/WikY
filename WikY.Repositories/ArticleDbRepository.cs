@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,10 @@ namespace WikY.Repositories
     public class ArticleDbRepository : DbRepository<Article, int>, IArticleRepository
     {
         public ArticleDbRepository(WikYContext dbContext) : base(dbContext) { }
+
+        public async Task<Article?> GetByTopic(string topic)
+        {
+            return await _dbSet.FirstOrDefaultAsync(a => a.Topic == topic);
+        }
     }
 }

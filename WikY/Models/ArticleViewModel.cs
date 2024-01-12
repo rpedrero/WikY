@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using WikY.Entities;
 
 namespace WikY.Models
 {
-    public class ArticleViewModel : Article
+    public class ArticleViewModel
     {
         private Article _article;
 
@@ -20,6 +21,7 @@ namespace WikY.Models
         }
 
         [Required]
+        [Remote("CheckTopicUnicity", "Article", ErrorMessage = "This topic is already used for another article.")]
         public string Topic
         {
             get
@@ -100,6 +102,13 @@ namespace WikY.Models
             _article = article;
         }
 
+        public ArticleViewModel() : this(new Article())
+        {
+        }
 
+        public Article GetArticle()
+        {
+            return _article;
+        }
     }
 }
