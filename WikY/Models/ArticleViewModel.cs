@@ -101,5 +101,14 @@ namespace WikY.Models
         {
             _article = article;
         }
+
+        public ArticleViewModel() : this(new Article())
+        {
+        }
+
+        public Article GetArticle()
+        {
+            return _article;
+        }
     }
 }

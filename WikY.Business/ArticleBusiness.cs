@@ -36,5 +36,35 @@ namespace WikY.Business
         {
             return (await _articleRepository.GetByTopic(topic)) is not null;
         }
+
+        public async Task<Article> CreateArticle(Article article)
+        {
+            if (string.IsNullOrWhiteSpace(article.Author))
+            {
+                throw new DataValidationException("Author is required.");
+            }
+
+            if (article.Author.Length > 30)
+            {
+                throw new DataValidationException("Author must have a maximum length of 30.");
+            }
+
+            if (string.IsNullOrWhiteSpace(article.Topic))
+            {
+                throw new DataValidationException("Topic is required.");
+            }
+
+            if (await ExistsArticleWithTopic(article.Topic))
+            {
+                throw new DataValidationException($"Topic \"{article.Topic}\" is already used.");
+            }
+
+            if (string.IsNullOrWhiteSpace(article.Content))
+            {
+                throw new DataValidationException("Content is required.");
+            }
+
+            return await _articleRepository.Create(article);
+        }
     }
 }

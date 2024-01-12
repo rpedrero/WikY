@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Runtime.InteropServices;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
@@ -8,10 +9,12 @@ namespace WikY.Controllers
 {
     public class ArticleController : Controller
     {
+        private ILogger<ArticleController> _log;
         private IArticleBusiness _articleBusiness;
 
-        public ArticleController(IArticleBusiness articleBusiness)
+        public ArticleController(ILogger<ArticleController> log, IArticleBusiness articleBusiness)
         {
+            _log = log;
             _articleBusiness = articleBusiness;
         }
 
@@ -44,9 +47,45 @@ namespace WikY.Controllers
             return View(new ArticleViewModel(article));
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(ArticleViewModel article)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    Article createdArticle = await _articleBusiness.CreateArticle(article.GetArticle());
+
+                    TempData["success"] = "The article has successfully been created.";
+
+                    return RedirectToAction("View", new { createdArticle.Id });
+                }
+                catch(DataValidationException ex)
+                {
+                    _log.LogError(ex.Message);
+
+                    TempData["error"] = ex.Message;
+
+                    return View(article);
+                }
+                catch(Exception ex)
+                {
+                    _log.LogError(ex.Message);
+
+                    TempData["error"] = "An error occured when attempting to create article. Try again later.";
+                    
+                    return View(article);
+                }
+            }
+            else
+            {
+                return View(article);
+            }
         }
 
         public async Task<IActionResult> CheckTopicUnicity(string topic)
