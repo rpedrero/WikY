@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Runtime.InteropServices;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
@@ -33,18 +32,18 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> View(int id)
         {
-            Article article;
+            Article? article = await _articleBusiness.GetArticleById(id);
 
-            try
+            if(article is not null)
             {
-                article = await _articleBusiness.GetArticleById(id);
+                return View(new ArticleViewModel(article));
             }
-            catch (ArticleNotFoundException)
+            else
             {
-                return NotFound();
+                TempData["error"] = "Article not found.";
+                
+                return RedirectToAction("Index");
             }
-
-            return View(new ArticleViewModel(article));
         }
 
         public IActionResult Create()
@@ -57,19 +56,14 @@ namespace WikY.Controllers
         {
             if(ModelState.IsValid)
             {
+                Article createdArticle = article.GetArticle();
                 try
                 {
-                    Article createdArticle = await _articleBusiness.CreateArticle(article.GetArticle());
-
-                    TempData["success"] = "The article has successfully been created.";
-
-                    return RedirectToAction("View", new { createdArticle.Id });
+                    await _articleBusiness.CreateArticle(article.GetArticle());
                 }
                 catch(DataValidationException ex)
                 {
-                    _log.LogError(ex.Message);
-
-                    TempData["error"] = ex.Message;
+                    ModelState.AddModelError(ex.FieldName, ex.Message);
 
                     return View(article);
                 }
@@ -77,10 +71,14 @@ namespace WikY.Controllers
                 {
                     _log.LogError(ex.Message);
 
-                    TempData["error"] = "An error occured when attempting to create article. Try again later.";
+                    TempData["error"] = "An error occurred when attempting to create article. Try again later.";
                     
                     return View(article);
                 }
+
+                TempData["success"] = "The article has been successfully created.";
+
+                return RedirectToAction("View", new { createdArticle.Id });
             }
             else
             {
@@ -88,9 +86,67 @@ namespace WikY.Controllers
             }
         }
 
-        public async Task<IActionResult> CheckTopicUnicity(string topic)
+        public async Task<IActionResult> Edit(int id)
         {
-            return Json(!await _articleBusiness.ExistsArticleWithTopic(topic));
+            Article? article = await _articleBusiness.GetArticleById(id);
+
+            if (article is not null)
+            {
+                return View(new ArticleViewModel(article));
+            }
+            else
+            {
+                TempData["error"] = "The article could not be found.";
+
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ArticleViewModel article)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _articleBusiness.UpdateArticle(article.GetArticle());
+                }
+                catch (ArticleNotFoundException)
+                {
+                    TempData["error"] = "Specified article does not exist.";
+
+                    return RedirectToAction("Index");
+                }
+                catch (DataValidationException ex)
+                {
+                    ModelState.AddModelError(ex.FieldName, ex.Message);
+
+                    return View(article);
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError(ex.Message);
+
+                    TempData["error"] = "An error occurred when attempting to update the article. Try again later.";
+
+                    return View(article);
+                }
+
+                TempData["success"] = "The article has been successfully updated.";
+
+                return RedirectToAction("View", new { article.Id });
+            }
+            else
+            {
+                return View(article);
+            }
+        }
+
+        public async Task<IActionResult> CheckTopicUnicity(int id, string topic)
+        {
+            Article? article = await _articleBusiness.GetArticleByTopic(topic);
+
+            return Json(article is null || (id != default && article.Id == id));
         }
     }
 }

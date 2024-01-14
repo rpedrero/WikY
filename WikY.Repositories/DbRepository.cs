@@ -50,5 +50,12 @@ namespace WikY.Repositories
 
             await _context.SaveChangesAsync();
         }
+
+        public async Task Update(T oldEntity, T newEntity)
+        {
+            _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

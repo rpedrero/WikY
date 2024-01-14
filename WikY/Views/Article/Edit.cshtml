@@ -1,0 +1,23 @@
+﻿@model ArticleViewModel
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<p><a class="btn btn-secondary" asp-action="View" asp-route-id="@Model.Id" role="button">Back to article</a></p>
+
+<form asp-action="Edit" id="article-edit-form">
+    <p class="hidden">
+        <input type="hidden" asp-for="Id" />
+    </p>
+    <p class="hidden">
+        <input type="hidden" asp-for="DateCreated" />
+    </p>
+    <p class="hidden">
+        <input type="hidden" asp-for="DateModified" />
+    </p>
+    <partial name="_ArticleEditFormBody" model="Model" />
+</form>
+
+<p><a class="btn btn-secondary" asp-action="View" asp-route-id="@Model.Id" role="button">Back to article</a></p>

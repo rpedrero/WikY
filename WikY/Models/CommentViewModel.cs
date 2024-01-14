@@ -3,7 +3,7 @@ using WikY.Entities;
 
 namespace WikY.Models
 {
-    public class CommentViewModel : Comment
+    public class CommentViewModel
     {
         private Comment _comment;
 

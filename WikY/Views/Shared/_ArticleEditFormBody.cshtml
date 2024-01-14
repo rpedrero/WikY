@@ -1,0 +1,35 @@
+﻿@model ArticleViewModel
+
+<p>
+    <label asp-for="Author">
+        <span>Author </span>
+        <span aria-label="required">*</span>
+        <span> :</span>
+    </label>
+    <input asp-for="Author" id="author-input" />
+    <br />
+    <span id="author-validation-message" asp-validation-for="Author"></span>
+</p>
+<p>
+    <label asp-for="Topic">
+        <span>Topic </span>
+        <span aria-label="required">*</span>
+        <span> :</span>
+    </label>
+    <input asp-for="Topic" id="topic-input" />
+    <br />
+    <span id="topic-validation-message" asp-validation-for="Topic"></span>
+</p>
+<p>
+    <label asp-for="Content">
+        <span>Content </span>
+        <span aria-label="required">*</span>
+        <span> :</span>
+    </label>
+    <textarea asp-for="Content" id="content-input"></textarea>
+    <br />
+    <span id="content-validation-message" asp-validation-for="Content"></span>
+</p>
+<p>
+    <button type="submit" id="submit-button">Submit</button>
+</p>

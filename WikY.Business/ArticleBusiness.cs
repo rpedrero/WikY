@@ -19,17 +19,14 @@ namespace WikY.Business
             return _articleRepository.GetAll();
         }
 
-        public async Task<Article> GetArticleById(int id)
+        public async Task<Article?> GetArticleById(int id)
         {
-            Article? article = await _articleRepository.GetById(id);
-            if(article is not null)
-            {
-                return article;
-            }
-            else
-            {
-                throw new ArticleNotFoundException(id); 
-            }
+            return await _articleRepository.GetById(id);
+        }
+
+        public async Task<Article?> GetArticleByTopic(string topic)
+        {
+            return await _articleRepository.GetByTopic(topic);
         }
 
         public async Task<bool> ExistsArticleWithTopic(string topic)
@@ -37,34 +34,57 @@ namespace WikY.Business
             return (await _articleRepository.GetByTopic(topic)) is not null;
         }
 
-        public async Task<Article> CreateArticle(Article article)
+        private async Task ValidateArticle(Article article, bool checkTopicUnicity = true)
         {
             if (string.IsNullOrWhiteSpace(article.Author))
             {
-                throw new DataValidationException("Author is required.");
+                throw new DataValidationException("Author is required.", nameof(article.Author));
             }
 
             if (article.Author.Length > 30)
             {
-                throw new DataValidationException("Author must have a maximum length of 30.");
+                throw new DataValidationException("Author must have a maximum length of 30.", nameof(article.Author));
             }
 
             if (string.IsNullOrWhiteSpace(article.Topic))
             {
-                throw new DataValidationException("Topic is required.");
+                throw new DataValidationException("Topic is required.", nameof(article.Topic));
             }
 
-            if (await ExistsArticleWithTopic(article.Topic))
+            if (checkTopicUnicity && await ExistsArticleWithTopic(article.Topic))
             {
-                throw new DataValidationException($"Topic \"{article.Topic}\" is already used.");
+                throw new DataValidationException($"This topic is already used for another article.", nameof(article.Topic));
             }
 
             if (string.IsNullOrWhiteSpace(article.Content))
             {
-                throw new DataValidationException("Content is required.");
+                throw new DataValidationException("Content is required.", nameof(article.Content));
             }
+        }
+
+        public async Task<Article> CreateArticle(Article article)
+        {
+            await ValidateArticle(article);
+
+            article.DateCreated = DateTime.Now;
+            article.DateModified = DateTime.Now;
 
             return await _articleRepository.Create(article);
+        }
+
+        public async Task UpdateArticle(Article article)
+        {
+            Article? articleInOldState = await GetArticleById(article.Id);
+            if (articleInOldState is null)
+            {
+                throw new ArticleNotFoundException(article.Id);
+            }
+            
+            await ValidateArticle(article, article.Topic != articleInOldState.Topic);
+
+            article.DateModified = DateTime.Now;
+
+            await _articleRepository.Update(articleInOldState, article);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace WikY.Models
     {
         private Article _article;
 
+        [Remote("CheckTopicUnicity", "Article", AdditionalFields = nameof(Topic), ErrorMessage = "This topic is already used for another article.")]
         public int Id
         {
             get
@@ -21,7 +22,7 @@ namespace WikY.Models
         }
 
         [Required]
-        [Remote("CheckTopicUnicity", "Article", ErrorMessage = "This topic is already used for another article.")]
+        [Remote("CheckTopicUnicity", "Article", AdditionalFields = nameof(Id), ErrorMessage = "This topic is already used for another article.")]
         public string Topic
         {
             get

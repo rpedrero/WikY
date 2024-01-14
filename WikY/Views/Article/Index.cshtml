@@ -3,13 +3,15 @@
 @{
 }
 
-<table>
+<p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
+
+<table class="table">
     <thead>
         <tr>
-            <th>Topic</th>
-            <th>Author</th>
-            <th>Created on</th>
-            <th>Last modified on</th>
+            <th scope="col">Topic</th>
+            <th scope="col">Author</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Last modified on</th>
         </tr>
     </thead>
     <tbody>
@@ -24,3 +26,5 @@
         }
     </tbody>
 </table>
+
+<p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
