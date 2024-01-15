@@ -86,5 +86,10 @@ namespace WikY.Business
 
             await _articleRepository.Update(articleInOldState, article);
         }
+
+        public async Task DeleteArticle(Article article)
+        {
+            await _articleRepository.Delete(article);
+        }
     }
 }

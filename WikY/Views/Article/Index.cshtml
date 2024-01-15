@@ -5,6 +5,24 @@
 
 <p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
 
+<div id="delete-article-modal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete article</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete article about topic: "<span id="article-to-delete-title"></span>"?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="deleteSelectedArticle()">Yes</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="unselectCurrentArticle()">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -12,19 +30,67 @@
             <th scope="col">Author</th>
             <th scope="col">Created on</th>
             <th scope="col">Last modified on</th>
+            <th scope="col">Edit</th>
+            <th scope="col">Delete</th>
         </tr>
     </thead>
     <tbody>
         @foreach (ArticleViewModel article in Model)
         {
-            <tr>
+            <tr id="article-@article.Id">
                 <td><a asp-action="View" asp-route-id="@article.Id">@article.Topic</a></td>
                 <td>@article.Author</td>
                 <td>@article.DateCreated.ToShortDateString() at @article.DateCreated.ToShortTimeString()</td>
                 <td>@article.DateModified.ToShortDateString() at @article.DateModified.ToShortTimeString()</td>
+                <td>
+                    <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@article.Id">
+                        <i class="bi bi-pen-fill"></i>
+                    </a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="showDeleteModal(@article.Id)">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
 <p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
+
+<script>
+    let deleteModal = new bootstrap.Modal(document.getElementById('delete-article-modal'), {
+        keyboard: false
+    });
+
+    let modalArticleToDeleteTitleElement = $('#article-to-delete-title');
+
+    let selectedArticleId = null;
+
+    function showDeleteModal(articleId) {
+        selectedArticleId = articleId;
+
+        modalArticleToDeleteTitleElement.text($('#article-' + articleId + '>td>a').text());
+
+        deleteModal.show();
+    }
+
+    function unselectCurrentArticle() {
+        selectedArticleId = null;
+        modalArticleToDeleteTitleElement.text('');
+    }
+
+    function deleteSelectedArticle() {
+        $.ajax({
+            url: '/Article/DeleteJson/' + selectedArticleId,
+            type: 'DELETE',
+            success: function (result) {
+                $('#article-' + selectedArticleId).remove();
+            },
+
+        }).done(function () {
+            unselectCurrentArticle();
+        });
+    }
+</script>
