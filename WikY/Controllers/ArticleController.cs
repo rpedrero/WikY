@@ -149,6 +149,24 @@ namespace WikY.Controllers
             return Json(article is null || (id != default && article.Id == id));
         }
 
+        public async Task<IActionResult> Delete(int id)
+        {
+            Article? article = await _articleBusiness.GetArticleById(id);
+
+            if (article is null)
+            {
+                TempData["error"] = "The article could not be found.";
+            }
+            else
+            {
+                await _articleBusiness.DeleteArticle(article);
+
+                TempData["success"] = "The article has been successfully deleted.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
         [HttpDelete]
         public async Task<IActionResult> DeleteJson(int id)
         {
