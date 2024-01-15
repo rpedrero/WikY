@@ -17,7 +17,8 @@ namespace WikY.Entities
         [Required]
         [MaxLength(100)]
         public DateTime Content { get; set; }
-
+        [Required]
+        public int ArticleId { get; set; }
         public Article? Article { get; set; }
     }
 }

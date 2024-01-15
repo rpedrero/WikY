@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using WikY.Business;
 using WikY.Business.Contracts;
 using WikY.Entities;
+using WikY.Models;
 using WikY.Repositories;
 using WikY.Repositories.Contracts;
 
@@ -14,6 +15,14 @@ builder.Services.AddTransient<IArticleRepository, ArticleDbRepository>();
 builder.Services.AddTransient<ICommentRepository, CommentDbRepository>();
 builder.Services.AddTransient<IArticleBusiness, ArticleBusiness>();
 builder.Services.AddTransient<ICommentBusiness, CommentBusiness>();
+builder.Services.AddAutoMapper(c =>
+{
+    c.CreateMap<Article, ArticleViewModel>();
+    c.CreateMap<ArticleViewModel, Article>();
+
+    c.CreateMap<Comment, CommentViewModel>();
+    c.CreateMap<CommentViewModel, Comment>();
+});
 
 var app = builder.Build();
 

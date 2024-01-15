@@ -6,110 +6,24 @@ namespace WikY.Models
 {
     public class ArticleViewModel
     {
-        private Article _article;
-
         [Remote("CheckTopicUnicity", "Article", AdditionalFields = nameof(Topic), ErrorMessage = "This topic is already used for another article.")]
-        public int Id
-        {
-            get
-            {
-                return _article.Id;
-            }
-            set
-            {
-                _article.Id = value;
-            }
-        }
+        public int Id { get; set; }
 
         [Required]
         [Remote("CheckTopicUnicity", "Article", AdditionalFields = nameof(Id), ErrorMessage = "This topic is already used for another article.")]
-        public string Topic
-        {
-            get
-            {
-                return _article.Topic;
-            }
-            set
-            {
-                _article.Topic = value;
-            }
-        }
+        public string Topic { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(30)]
-        public string Author
-        {
-            get
-            {
-                return _article.Author;
-            }
-            set
-            {
-                _article.Author = value;
-            }
-        }
+        public string Author { get; set; } = string.Empty;
 
-        public DateTime DateCreated
-        {
-            get
-            {
-                return _article.DateCreated;
-            }
-            set
-            {
-                _article.DateCreated = value;
-            }
-        }
+        public DateTime DateCreated { get; set; }
 
-        public DateTime DateModified
-        {
-            get
-            {
-                return _article.DateModified;
-            }
-            set
-            {
-                _article.DateModified = value;
-            }
-        }
+        public DateTime DateModified { get; set; }
 
         [Required]
-        public string Content
-        {
-            get
-            {
-                return _article.Content;
-            }
-            set
-            {
-                _article.Content = value;
-            }
-        }
+        public string Content { get; set; } = string.Empty;
 
-        public ICollection<Comment>? Comments
-        {
-            get
-            {
-                return _article.Comments;
-            }
-            set
-            {
-                _article.Comments = value;
-            }
-        }
-
-        public ArticleViewModel(Article article)
-        {
-            _article = article;
-        }
-
-        public ArticleViewModel() : this(new Article())
-        {
-        }
-
-        public Article GetArticle()
-        {
-            return _article;
-        }
+        public ICollection<CommentViewModel>? Comments { get; set; }
     }
 }

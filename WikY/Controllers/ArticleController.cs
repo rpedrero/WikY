@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
@@ -10,11 +11,13 @@ namespace WikY.Controllers
     {
         private ILogger<ArticleController> _log;
         private IArticleBusiness _articleBusiness;
+        private IMapper _mapper;
 
-        public ArticleController(ILogger<ArticleController> log, IArticleBusiness articleBusiness)
+        public ArticleController(ILogger<ArticleController> log, IArticleBusiness articleBusiness, IMapper mapper)
         {
             _log = log;
             _articleBusiness = articleBusiness;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -24,7 +27,7 @@ namespace WikY.Controllers
 
             await foreach (Article article in articles)
             {
-                articlesViewModels.Add(new ArticleViewModel(article));
+                articlesViewModels.Add(_mapper.Map<ArticleViewModel>(article));
             }
 
             return View(articlesViewModels);
@@ -36,7 +39,7 @@ namespace WikY.Controllers
 
             if(article is not null)
             {
-                return View(new ArticleViewModel(article));
+                return View(_mapper.Map<ArticleViewModel>(article));
             }
             else
             {
@@ -56,10 +59,10 @@ namespace WikY.Controllers
         {
             if(ModelState.IsValid)
             {
-                Article createdArticle = article.GetArticle();
+                Article createdArticle = _mapper.Map<Article>(article);
                 try
                 {
-                    await _articleBusiness.CreateArticle(article.GetArticle());
+                    await _articleBusiness.CreateArticle(createdArticle);
                 }
                 catch(DataValidationException ex)
                 {
@@ -92,7 +95,7 @@ namespace WikY.Controllers
 
             if (article is not null)
             {
-                return View(new ArticleViewModel(article));
+                return View(_mapper.Map<ArticleViewModel>(article));
             }
             else
             {
@@ -109,7 +112,7 @@ namespace WikY.Controllers
             {
                 try
                 {
-                    await _articleBusiness.UpdateArticle(article.GetArticle());
+                    await _articleBusiness.UpdateArticle(_mapper.Map<Article>(article));
                 }
                 catch (ArticleNotFoundException)
                 {
