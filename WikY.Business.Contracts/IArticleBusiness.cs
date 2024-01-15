@@ -10,5 +10,6 @@ namespace WikY.Business.Contracts
         public Task<bool> ExistsArticleWithTopic(string topic);
         public Task<Article> CreateArticle(Article article);
         Task UpdateArticle(Article article);
+        Task DeleteArticle(Article article);
     }
 }

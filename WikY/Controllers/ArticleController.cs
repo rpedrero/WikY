@@ -148,5 +148,22 @@ namespace WikY.Controllers
 
             return Json(article is null || (id != default && article.Id == id));
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteJson(int id)
+        {
+            Article? article = await _articleBusiness.GetArticleById(id);
+
+            if (article is null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await _articleBusiness.DeleteArticle(article);
+
+                return Ok();
+            }
+        }
     }
 }
