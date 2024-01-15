@@ -42,8 +42,16 @@
                 <td>@article.Author</td>
                 <td>@article.DateCreated.ToShortDateString() at @article.DateCreated.ToShortTimeString()</td>
                 <td>@article.DateModified.ToShortDateString() at @article.DateModified.ToShortTimeString()</td>
-                <td><button>Edit</button></td>
-                <td><button onclick="showDeleteModal(@article.Id)">Delete</button></td>
+                <td>
+                    <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@article.Id">
+                        <i class="bi bi-pen-fill"></i>
+                    </a>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" onclick="showDeleteModal(@article.Id)">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                </td>
             </tr>
         }
     </tbody>
@@ -62,9 +70,9 @@
 
     function showDeleteModal(articleId) {
         selectedArticleId = articleId;
-        
+
         modalArticleToDeleteTitleElement.text($('#article-' + articleId + '>td>a').text());
-        
+
         deleteModal.show();
     }
 
@@ -80,7 +88,7 @@
             success: function (result) {
                 $('#article-' + selectedArticleId).remove();
             },
-            
+
         }).done(function () {
             unselectCurrentArticle();
         });
