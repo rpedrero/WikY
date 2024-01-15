@@ -38,6 +38,12 @@
 </p>
 <p><a class="btn btn-secondary" asp-action="Index" role="button">Back to list</a></p>
 
+<hr />
+
+<h3>Comments</h3>
+
+<partial name="_ArticleCommentsList" model="Model" />
+
 <script>
     function deleteArticle() {
         window.location.href = '/Article/Delete/@Model.Id';
