@@ -1,8 +1,13 @@
-﻿@{
+﻿@model ArticleViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1 class="display-4">Welcome on WikY</h1>
+
+<h3>Last article</h3>
+
+<partial name="_ArticleView" model="Model" />
+
+<p><a asp-controller="Article" asp-action="View" asp-route-id="@Model.Id">Read article</a></p>

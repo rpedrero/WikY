@@ -65,16 +65,7 @@
     <button class="btn btn-danger" asp-action="" asp-route-id="@Model.Id" role="button" data-bs-toggle="modal" data-bs-target="#delete-article-modal">Delete article</button>
 </p>
 
-<h1>@Model.Topic</h1>
-
-<p>Created on @Model.DateCreated.ToShortDateString() at @Model.DateCreated.ToShortTimeString() by @Model.Author</p>
-<p>Last modification: @Model.DateModified.ToShortDateString() at @Model.DateModified.ToShortTimeString()</p>
-
-<hr />
-
-<p>
-    @Model.Content
-</p>
+<partial name="_ArticleView" model="Model" />
 
 <hr />
 

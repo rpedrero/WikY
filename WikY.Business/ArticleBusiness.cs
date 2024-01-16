@@ -29,6 +29,11 @@ namespace WikY.Business
             return await _articleRepository.GetByTopic(topic);
         }
 
+        public async Task<Article?> GetLastArticle()
+        {
+            return await _articleRepository.GetLast();
+        }
+
         public async Task<bool> ExistsArticleWithTopic(string topic)
         {
             return (await _articleRepository.GetByTopic(topic)) is not null;

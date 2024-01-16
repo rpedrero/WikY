@@ -1,5 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using WikY.Business.Contracts;
+using WikY.Entities;
 using WikY.Models;
 
 namespace WikY.Controllers
@@ -7,15 +10,21 @@ namespace WikY.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IArticleBusiness _articleBusiness;
+        private readonly IMapper _mapper;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IArticleBusiness articleBusiness, IMapper mapper)
         {
             _logger = logger;
+            _articleBusiness = articleBusiness;
+            _mapper = mapper;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            Article? lastArticle = await _articleBusiness.GetLastArticle();
+            
+            return View(_mapper.Map<ArticleViewModel>(lastArticle));
         }
 
         public IActionResult Privacy()

@@ -22,5 +22,10 @@ namespace WikY.Repositories
         {
             return await _dbSet.FirstOrDefaultAsync(a => a.Topic == topic);
         }
+
+        public async Task<Article?> GetLast()
+        {
+            return await _dbSet.OrderByDescending(a => a.DateCreated).FirstOrDefaultAsync();
+        }
     }
 }
