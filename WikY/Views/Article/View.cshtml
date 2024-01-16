@@ -56,16 +56,76 @@
     <a class="btn btn-primary" asp-controller="Comment" asp-action="CreateForArticle" asp-route-id="@Model.Id" role="button">New comment</a>
 </p>
 
-<partial name="_ArticleCommentsList" model="Model" />
+@if (Model.Comments.Count > 0)
+{
+    foreach (CommentViewModel comment in Model.Comments)
+    {
+        <partial name="_Comment" model="comment" />
+    }
+}
+else
+{
+    <p>No comment for now on this article.</p>
+}
 
 <hr />
 
 <h3>Create a comment</h3>
 
-<partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
+<div id="article-comments">
+    <partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
+</div>
+
+
+<hr />
+
+<h3>Create a comment (AJAX version)</h3>
+
+<div class="alert alert-danger hidden" role="alert">
+    <p id="ajax-form-error-placeholder"></p>
+</div>
+
+<form action="Comment/CreateForArticle" id="create-comment-ajaxversion-form">
+    <p>
+        <label for="ajax-author">
+            <span>Author </span>
+            <span aria-label="required">*</span>
+            <span> :</span>
+        </label>
+        <input name="ajax-author" id="ajax-author-input" />
+    </p>
+    <p>
+        <label for="ajax-content">
+            <span>Content </span>
+            <span aria-label="required">*</span>
+            <span> :</span>
+        </label>
+        <textarea name="ajax-content" id="ajax-content-input"></textarea>
+    </p>
+    <p>
+        <button class="btn btn-primary" type="submit" id="ajax-submit-button">Submit</button>
+    </p>
+</form>
 
 <script>
     function deleteArticle() {
         window.location.href = '/Article/Delete/@Model.Id';
     }
+
+    $('#create-comment-ajaxversion-form').submit(function (e) {
+        e.preventDefault();
+
+        $.post('/Comment/CreateAjax',
+            {
+                ArticleId: @Model.Id,
+                Author: $('#ajax-author-input').val(),
+                Content: $('#ajax-content-input').val()
+            },
+            function (data) {
+                $('#article-comments').append(data);
+            })
+            .fail(function (response) {
+                console.log(response);
+            });
+    });
 </script>

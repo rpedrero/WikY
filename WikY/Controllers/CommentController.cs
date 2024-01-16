@@ -56,6 +56,8 @@ namespace WikY.Controllers
                     catch (DataValidationException ex)
                     {
                         ModelState.AddModelError(ex.FieldName, ex.Message);
+
+                        return View(comment);
                     }
                     catch (Exception ex)
                     {
@@ -78,6 +80,48 @@ namespace WikY.Controllers
             else
             {
                 return View(comment);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAjax(CommentCreateViewModel comment)
+        {
+            if (ModelState.IsValid)
+            {
+                Comment commentToCreate = _mapper.Map<Comment>(comment);
+
+                Article? article = await _articleBusiness.GetArticleById(comment.ArticleId);
+                if (article is not null)
+                {
+                    commentToCreate.Article = article;
+
+                    try
+                    {
+                        await _commentBusiness.CreateComment(commentToCreate);
+                    }
+                    catch (DataValidationException ex)
+                    {
+                        ModelState.AddModelError(ex.FieldName, ex.Message);
+
+                        return BadRequest(ModelState);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex.Message);
+
+                        return Problem();
+                    }
+
+                    return PartialView("_Comment", _mapper.Map<CommentViewModel>(commentToCreate));
+                }
+                else
+                {
+                    return BadRequest("Article not found.");
+                }
+            }
+            else
+            {
+                return BadRequest(ModelState);
             }
         }
     }

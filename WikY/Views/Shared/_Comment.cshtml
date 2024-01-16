@@ -1,0 +1,10 @@
+﻿@model CommentViewModel
+
+<div class="card article-comment">
+    <div class="card-header">
+        <p>On @Model.DateCreated.ToShortDateString() at @Model.DateCreated.ToShortTimeString() by @Model.Author</p>
+    </div>
+    <div class="card-body">
+        <p>@Model.Content</p>
+    </div>
+</div>
