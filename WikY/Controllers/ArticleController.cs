@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
@@ -8,13 +9,17 @@ namespace WikY.Controllers
 {
     public class ArticleController : Controller
     {
-        private ILogger<ArticleController> _log;
+        private ILogger<ArticleController> _logger;
         private IArticleBusiness _articleBusiness;
+        private ICommentBusiness _commentBusiness;
+        private IMapper _mapper;
 
-        public ArticleController(ILogger<ArticleController> log, IArticleBusiness articleBusiness)
+        public ArticleController(ILogger<ArticleController> logger, IArticleBusiness articleBusiness, ICommentBusiness commentBusiness, IMapper mapper)
         {
-            _log = log;
+            _logger = logger;
             _articleBusiness = articleBusiness;
+            _commentBusiness = commentBusiness;
+            _mapper = mapper;
         }
 
         public async Task<IActionResult> Index()
@@ -24,7 +29,7 @@ namespace WikY.Controllers
 
             await foreach (Article article in articles)
             {
-                articlesViewModels.Add(new ArticleViewModel(article));
+                articlesViewModels.Add(_mapper.Map<ArticleViewModel>(article));
             }
 
             return View(articlesViewModels);
@@ -36,7 +41,7 @@ namespace WikY.Controllers
 
             if(article is not null)
             {
-                return View(new ArticleViewModel(article));
+                return View(_mapper.Map<ArticleViewModel>(article));
             }
             else
             {
@@ -56,10 +61,10 @@ namespace WikY.Controllers
         {
             if(ModelState.IsValid)
             {
-                Article createdArticle = article.GetArticle();
+                Article createdArticle = _mapper.Map<Article>(article);
                 try
                 {
-                    await _articleBusiness.CreateArticle(article.GetArticle());
+                    await _articleBusiness.CreateArticle(createdArticle);
                 }
                 catch(DataValidationException ex)
                 {
@@ -69,7 +74,7 @@ namespace WikY.Controllers
                 }
                 catch(Exception ex)
                 {
-                    _log.LogError(ex.Message);
+                    _logger.LogError(ex.Message);
 
                     TempData["error"] = "An error occurred when attempting to create article. Try again later.";
                     
@@ -92,7 +97,7 @@ namespace WikY.Controllers
 
             if (article is not null)
             {
-                return View(new ArticleViewModel(article));
+                return View(_mapper.Map<ArticleViewModel>(article));
             }
             else
             {
@@ -109,7 +114,7 @@ namespace WikY.Controllers
             {
                 try
                 {
-                    await _articleBusiness.UpdateArticle(article.GetArticle());
+                    await _articleBusiness.UpdateArticle(_mapper.Map<Article>(article));
                 }
                 catch (ArticleNotFoundException)
                 {
@@ -125,7 +130,7 @@ namespace WikY.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError(ex.Message);
+                    _logger.LogError(ex.Message);
 
                     TempData["error"] = "An error occurred when attempting to update the article. Try again later.";
 

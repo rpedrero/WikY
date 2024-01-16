@@ -13,6 +13,11 @@ namespace WikY.Repositories
     {
         public ArticleDbRepository(WikYContext dbContext) : base(dbContext) { }
 
+        public override async Task<Article?> GetById(int id)
+        {
+            return await _dbSet.Where(a => a.Id == id).Include(a => a.Comments).FirstOrDefaultAsync();
+        }
+
         public async Task<Article?> GetByTopic(string topic)
         {
             return await _dbSet.FirstOrDefaultAsync(a => a.Topic == topic);

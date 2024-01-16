@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WikY.Entities;
 
@@ -11,9 +12,11 @@ using WikY.Entities;
 namespace WikY.Entities.Migrations
 {
     [DbContext(typeof(WikYContext))]
-    partial class WikYContextModelSnapshot : ModelSnapshot
+    [Migration("20240115203756_Added-Comment-Article-Id-Field-In-Entity-Class")]
+    partial class AddedCommentArticleIdFieldInEntityClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,10 +73,9 @@ namespace WikY.Entities.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<string>("Content")
-                        .IsRequired()
+                    b.Property<DateTime>("Content")
                         .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
