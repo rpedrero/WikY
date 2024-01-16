@@ -39,6 +39,10 @@ namespace WikY.Controllers
 
             if(article is not null)
             {
+                //ArticleViewModel articleVM = _mapper.Map<ArticleViewModel>(article);
+
+                //articleVM.Comments.OrderByDescending(c => c.Id);
+
                 return View(_mapper.Map<ArticleViewModel>(article));
             }
             else

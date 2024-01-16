@@ -56,26 +56,25 @@
     <a class="btn btn-primary" asp-controller="Comment" asp-action="CreateForArticle" asp-route-id="@Model.Id" role="button">New comment</a>
 </p>
 
-@if (Model.Comments.Count > 0)
-{
-    foreach (CommentViewModel comment in Model.Comments)
+<div id="article-comments">
+    @if (Model.Comments.Count > 0)
     {
-        <partial name="_Comment" model="comment" />
+        foreach (CommentViewModel comment in Model.Comments.OrderByDescending(c => c.DateCreated))
+        {
+            <partial name="_Comment" model="comment" />
+        }
     }
-}
-else
-{
-    <p>No comment for now on this article.</p>
-}
+    else
+    {
+        <p id="no-comment">No comment for now on this article.</p>
+    }
+</div>
 
 <hr />
 
 <h3>Create a comment</h3>
 
-<div id="article-comments">
-    <partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
-</div>
-
+<partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
 
 <hr />
 
@@ -112,17 +111,28 @@ else
         window.location.href = '/Article/Delete/@Model.Id';
     }
 
+    let authorInputElement = $('#ajax-author-input');
+    let contentInputElement = $('#ajax-content-input');
+
     $('#create-comment-ajaxversion-form').submit(function (e) {
         e.preventDefault();
 
         $.post('/Comment/CreateAjax',
             {
                 ArticleId: @Model.Id,
-                Author: $('#ajax-author-input').val(),
-                Content: $('#ajax-content-input').val()
+                Author: authorInputElement.val(),
+                Content: contentInputElement.val()
             },
             function (data) {
-                $('#article-comments').append(data);
+                let noCommentTextElement = $('#no-comment');
+                if (noCommentTextElement) {
+                    noCommentTextElement.remove();
+                }
+
+                $('#article-comments').prepend(data);
+
+                authorInputElement.val(null);
+                contentInputElement.val(null);
             })
             .fail(function (response) {
                 console.log(response);
