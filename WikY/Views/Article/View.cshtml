@@ -56,22 +56,6 @@
     <a class="btn btn-primary" asp-controller="Comment" asp-action="CreateForArticle" asp-route-id="@Model.Id" role="button">New comment</a>
 </p>
 
-<div id="article-comments">
-    @if (Model.Comments.Count > 0)
-    {
-        foreach (CommentViewModel comment in Model.Comments.OrderByDescending(c => c.DateCreated))
-        {
-            <partial name="_Comment" model="comment" />
-        }
-    }
-    else
-    {
-        <p id="no-comment">No comment for now on this article.</p>
-    }
-</div>
-
-<hr />
-
 <h3>Create a comment</h3>
 
 <partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
@@ -105,6 +89,22 @@
         <button class="btn btn-primary" type="submit" id="ajax-submit-button">Submit</button>
     </p>
 </form>
+
+<hr />
+
+<div id="article-comments">
+    @if (Model.Comments.Count > 0)
+    {
+        foreach (CommentViewModel comment in Model.Comments.OrderByDescending(c => c.DateCreated))
+        {
+            <partial name="_Comment" model="comment" />
+        }
+    }
+    else
+    {
+        <p id="no-comment">No comment for now on this article.</p>
+    }
+</div>
 
 <script>
     function deleteArticle() {
