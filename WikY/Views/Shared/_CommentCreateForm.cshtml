@@ -12,7 +12,7 @@
         </label>
         <input asp-for="Author" id="author-input" />
         <br />
-        <span asp-validation-for="Author"></span>
+        <span asp-validation-for="Author" class="validation-error"></span>
     </p>
     <p>
         <label asp-for="Content">
@@ -22,7 +22,7 @@
         </label>
         <textarea asp-for="Content" id="content-input"></textarea>
         <br />
-        <span asp-validation-for="Content"></span>
+        <span asp-validation-for="Content" class="validation-error"></span>
     </p>
     <p>
         <button class="btn btn-primary" type="submit" id="submit-button">Submit</button>

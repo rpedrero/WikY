@@ -56,16 +56,144 @@
     <a class="btn btn-primary" asp-controller="Comment" asp-action="CreateForArticle" asp-route-id="@Model.Id" role="button">New comment</a>
 </p>
 
-<partial name="_ArticleCommentsList" model="Model" />
-
-<hr />
-
 <h3>Create a comment</h3>
 
 <partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
+
+<hr />
+
+<h3>Create a comment (AJAX version)</h3>
+
+<div class="alert alert-danger hidden" id="ajax-global-form-error-placeholder" role="alert">
+</div>
+
+<form action="Comment/CreateForArticle" id="create-comment-ajaxversion-form">
+    <p>
+        <label for="ajax-author">
+            <span>Author </span>
+            <span aria-label="required">*</span>
+            <span> :</span>
+        </label>
+        <input name="ajax-author" id="ajax-author-input" />
+        <br/>
+        <span class="validation-error hidden" id="ajax-author-validation"></span>
+    </p>
+    <p>
+        <label for="ajax-content">
+            <span>Content </span>
+            <span aria-label="required">*</span>
+            <span> :</span>
+        </label>
+        <textarea name="ajax-content" id="ajax-content-input"></textarea>
+        <br />
+        <span class="validation-error" id="ajax-content-validation"></span>
+    </p>
+    <p>
+        <button class="btn btn-primary" type="submit" id="ajax-submit-button">Submit</button>
+    </p>
+</form>
+
+<hr />
+
+<div id="article-comments">
+    @if (Model.Comments.Count > 0)
+    {
+        foreach (CommentViewModel comment in Model.Comments.OrderByDescending(c => c.DateCreated))
+        {
+            <partial name="_Comment" model="comment" />
+        }
+    }
+    else
+    {
+        <p id="no-comment">No comment for now on this article.</p>
+    }
+</div>
 
 <script>
     function deleteArticle() {
         window.location.href = '/Article/Delete/@Model.Id';
     }
+
+    let globalFormErrorElement = $('#ajax-global-form-error-placeholder');
+
+    let authorInputElement = $('#ajax-author-input');
+    let contentInputElement = $('#ajax-content-input');
+
+    let ajaxAuthorValidationElement = $('#ajax-author-validation');
+    let ajaxContentValidationElement = $('#ajax-content-validation');
+
+    $('#create-comment-ajaxversion-form').submit(function (e) {
+        e.preventDefault();
+
+        $.post('/Comment/CreateAjax',
+            {
+                ArticleId: @Model.Id,
+                Author: authorInputElement.val(),
+                Content: contentInputElement.val()
+            },
+            function (data) {
+                let noCommentTextElement = $('#no-comment');
+                if (noCommentTextElement) {
+                    noCommentTextElement.remove();
+                }
+
+                $('#article-comments').prepend(data);
+
+                authorInputElement.val(null);
+                contentInputElement.val(null);
+
+                globalFormErrorElement.children().remove();
+                globalFormErrorElement.addClass('hidden');
+            })
+            .fail(function (response) {
+                if (response.status === 400) {
+                    let responseJSON = response.responseJSON;
+
+                    if (responseJSON['Author']) {
+                        ajaxAuthorValidationElement.text(responseJSON['Author']);
+                        ajaxAuthorValidationElement.removeClass('hidden');
+                    }
+
+                    if (responseJSON['Content']) {
+                        ajaxContentValidationElement.text(responseJSON['Content']);
+                        ajaxContentValidationElement.removeClass('hidden');
+                    }
+                }
+                else if (response.status === 500) {
+                    globalFormErrorElement.append('<p>An unexpected error has occurred when attempting to send your comment. Try again later.</p>');
+                    globalFormErrorElement.removeClass('hidden');
+                }
+            });
+    });
+
+    authorInputElement.on('input', function (e) {
+        if (!e.target.value.trim()) {
+            ajaxAuthorValidationElement.text('The Author field is required.');
+            ajaxAuthorValidationElement.removeClass('hidden');
+        }
+        else {
+            ajaxAuthorValidationElement.text(null);
+            ajaxAuthorValidationElement.addClass('hidden');
+        }
+
+        if(e.target.value.length > 30) {
+            ajaxAuthorValidationElement.text('The field Author must be a string or array type with a maximum length of \'30\'.');
+            ajaxAuthorValidationElement.removeClass('hidden');
+        }
+        else {
+            ajaxAuthorValidationElement.text(null);
+            ajaxAuthorValidationElement.addClass('hidden');
+        }
+    });
+
+    contentInputElement.on('input', function (e) {
+        if (!e.target.value.trim()) {
+            ajaxContentValidationElement.text('The Content field is required.');
+            ajaxContentValidationElement.removeClass('hidden');
+        }
+        else {
+            ajaxContentValidationElement.text(null);
+            ajaxContentValidationElement.addClass('hidden');
+        }
+    })
 </script>
