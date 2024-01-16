@@ -1,4 +1,4 @@
-﻿@model CommentViewModel
+﻿@model CommentCreateViewModel
 
 @section Scripts
 {
@@ -9,31 +9,4 @@
 
 <h1>Comment an article</h1>
 
-<form asp-action="Create">
-    <p class="hidden">
-        <input type="hidden" asp-for="ArticleId" />
-    </p>
-    <p>
-        <label asp-for="Author">
-            <span>Author </span>
-            <span aria-label="required">*</span>
-            <span> :</span>
-        </label>
-        <input asp-for="Author" id="author-input" />
-        <br />
-        <span asp-validation-for="Author"></span>
-    </p>
-    <p>
-        <label asp-for="Content">
-            <span>Content </span>
-            <span aria-label="required">*</span>
-            <span> :</span>
-        </label>
-        <textarea asp-for="Content" id="content-input"></textarea>
-        <br />
-        <span asp-validation-for="Content"></span>
-    </p>
-    <p>
-        <button class="btn btn-primary" type="submit" id="submit-button">Submit</button>
-    </p>
-</form>
+<partial name="_CommentCreateForm" model="Model" />

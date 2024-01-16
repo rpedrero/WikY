@@ -27,9 +27,7 @@ namespace WikY.Controllers
             Article? article = await _articleBusiness.GetArticleById(id);
             if (article is not null)
             {
-                CommentViewModel comment = new CommentViewModel { ArticleId = article.Id };
-
-                return View(comment);
+                return View(new CommentCreateViewModel { ArticleId = article.Id });
             }
             else
             {
@@ -40,7 +38,7 @@ namespace WikY.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CommentViewModel comment)
+        public async Task<IActionResult> CreateForArticle(CommentCreateViewModel comment)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +63,7 @@ namespace WikY.Controllers
 
                         TempData["error"] = "An unexpected error has occurred when attempting to create the comment. Try again later.";
 
-                        return RedirectToAction("CreateForArticle", comment);
+                        return View(comment);
                     }
 
                     return RedirectToAction("View", "Article", new { article.Id });
@@ -79,7 +77,7 @@ namespace WikY.Controllers
             }
             else
             {
-                return RedirectToAction("CreateForArticle", comment);
+                return View(comment);
             }
         }
     }
