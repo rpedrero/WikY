@@ -124,5 +124,62 @@ namespace WikY.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            Comment? comment = await _commentBusiness.GetCommentById(id);
+            if(comment is not null)
+            {
+                int articleId = comment.ArticleId;
+                
+                try
+                {
+                    await _commentBusiness.DeleteComment(comment);
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+                    
+                    TempData["error"] = "An unexpected error has occurred when attempting to delete the comment. Try again later.";
+
+                    return RedirectToAction("View", "Article", new { Id = articleId });
+                }
+                
+                TempData["success"] = "The comment has been successfully deleted.";
+
+                return RedirectToAction("View", "Article", new { Id = articleId });
+            }
+            else
+            {
+                TempData["error"] = "Comment not found.";
+
+                return RedirectToAction("Index", "Article");
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAjax(int id)
+        {
+            Comment? comment = await _commentBusiness.GetCommentById(id);
+            if (comment is not null)
+            {
+                try
+                {
+                    await _commentBusiness.DeleteComment(comment);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.Message);
+
+                    return Problem();
+                }
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
     }
 }

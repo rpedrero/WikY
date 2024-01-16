@@ -30,5 +30,15 @@ namespace WikY.Business
 
             await _commentRepository.Create(comment);
         }
+
+        public async Task<Comment?> GetCommentById(int id)
+        {
+            return await _commentRepository.GetById(id);
+        }
+
+        public async Task DeleteComment(Comment comment)
+        {
+            await _commentRepository.Delete(comment);
+        }
     }
 }

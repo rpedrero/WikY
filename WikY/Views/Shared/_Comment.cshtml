@@ -1,8 +1,17 @@
 ﻿@model CommentViewModel
 
-<div class="card article-comment">
-    <div class="card-header">
+<div class="card article-comment" id="comment-@Model.Id">
+    <div class="card-header comment-header">
         <p>On @Model.DateCreated.ToShortDateString() at @Model.DateCreated.ToShortTimeString() by @Model.Author</p>
+        <div id="comment-actions">
+            <button type="button" class="btn btn-danger" onclick="onCommentDeleteButton(@Model.Id)">
+                <i class="bi bi-trash3-fill"></i>
+            </button>
+            <button type="button" class="btn btn-danger" onclick="onCommentAjaxDeleteButton(@Model.Id)">
+                <i class="bi bi-trash3-fill"></i>
+                <span>AJAX version</span>
+            </button>
+        </div>
     </div>
     <div class="card-body">
         <p>@Model.Content</p>
