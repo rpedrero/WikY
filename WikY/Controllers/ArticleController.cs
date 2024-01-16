@@ -23,7 +23,7 @@ namespace WikY.Controllers
         public async Task<IActionResult> Index()
         {
             IAsyncEnumerable<Article> articles = _articleBusiness.GetAllArticles();
-            IList<ArticleViewModel> articlesViewModels = new List<ArticleViewModel>();
+            ICollection<ArticleViewModel> articlesViewModels = new List<ArticleViewModel>();
 
             await foreach (Article article in articles)
             {
@@ -185,6 +185,17 @@ namespace WikY.Controllers
 
                 return Ok();
             }
+        }
+
+        public async Task<IActionResult> SearchAjax(string? topic, string? content, string? author)
+        {
+            ICollection<ArticleViewModel> results = new List<ArticleViewModel>();
+            await foreach(Article article in _articleBusiness.FindArticle(topic, content, author))
+            {
+                results.Add(_mapper.Map<ArticleViewModel>(article));
+            }
+            
+            return PartialView("_ArticlesList", results);
         }
     }
 }

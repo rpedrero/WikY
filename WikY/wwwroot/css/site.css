@@ -33,3 +33,9 @@ body {
     display: flex;
     justify-content: space-between;
 }
+
+#article-search-bar {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}

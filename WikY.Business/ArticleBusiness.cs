@@ -34,6 +34,11 @@ namespace WikY.Business
             return await _articleRepository.GetLast();
         }
 
+        public IAsyncEnumerable<Article> FindArticle(string? topic, string? content, string? author)
+        {
+            return _articleRepository.Find(topic, content, author);
+        }
+
         public async Task<bool> ExistsArticleWithTopic(string topic)
         {
             return (await _articleRepository.GetByTopic(topic)) is not null;

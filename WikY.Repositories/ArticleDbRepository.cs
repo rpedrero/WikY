@@ -27,5 +27,27 @@ namespace WikY.Repositories
         {
             return await _dbSet.OrderByDescending(a => a.DateCreated).FirstOrDefaultAsync();
         }
+
+        public IAsyncEnumerable<Article> Find(string? topic, string? content, string? author)
+        {
+            IQueryable<Article> results = _dbSet.AsSingleQuery();
+
+            if(!string.IsNullOrWhiteSpace(topic))
+            {
+                results = results.Where(a => EF.Functions.Like(a.Topic, $"%{topic}%"));
+            }
+
+            if(!string.IsNullOrWhiteSpace(content))
+            {
+                results = results.Where(a => EF.Functions.Like(a.Content, $"%{content}%"));
+            }
+
+            if(!string.IsNullOrWhiteSpace(author))
+            {
+                results = results.Where(a => EF.Functions.Like(a.Author, $"%{author}%"));
+            }
+
+            return results.AsAsyncEnumerable();
+        }
     }
 }

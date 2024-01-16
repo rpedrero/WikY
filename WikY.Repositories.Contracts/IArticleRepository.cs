@@ -11,5 +11,6 @@ namespace WikY.Repositories.Contracts
     {
         Task<Article?> GetByTopic(string topic);
         Task<Article?> GetLast();
+        IAsyncEnumerable<Article> Find(string? topic, string? content, string? author);
     }
 }
