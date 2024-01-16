@@ -17,7 +17,7 @@ namespace WikY.Models
 
         [Required]
         [MaxLength(100)]
-        public DateTime Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
         public int ArticleId { get; set; }
     }

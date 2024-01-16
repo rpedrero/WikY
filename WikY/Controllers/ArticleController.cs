@@ -9,14 +9,16 @@ namespace WikY.Controllers
 {
     public class ArticleController : Controller
     {
-        private ILogger<ArticleController> _log;
+        private ILogger<ArticleController> _logger;
         private IArticleBusiness _articleBusiness;
+        private ICommentBusiness _commentBusiness;
         private IMapper _mapper;
 
-        public ArticleController(ILogger<ArticleController> log, IArticleBusiness articleBusiness, IMapper mapper)
+        public ArticleController(ILogger<ArticleController> logger, IArticleBusiness articleBusiness, ICommentBusiness commentBusiness, IMapper mapper)
         {
-            _log = log;
+            _logger = logger;
             _articleBusiness = articleBusiness;
+            _commentBusiness = commentBusiness;
             _mapper = mapper;
         }
 
@@ -72,7 +74,7 @@ namespace WikY.Controllers
                 }
                 catch(Exception ex)
                 {
-                    _log.LogError(ex.Message);
+                    _logger.LogError(ex.Message);
 
                     TempData["error"] = "An error occurred when attempting to create article. Try again later.";
                     
@@ -128,7 +130,7 @@ namespace WikY.Controllers
                 }
                 catch (Exception ex)
                 {
-                    _log.LogError(ex.Message);
+                    _logger.LogError(ex.Message);
 
                     TempData["error"] = "An error occurred when attempting to update the article. Try again later.";
 

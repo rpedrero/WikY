@@ -12,7 +12,7 @@ namespace WikY.Entities
         public int Id { get; set; }
 
         [Required]
-        public string Topic { get; set; } = "";
+        public string Topic { get; set; } = string.Empty;
 
         [Required]
         [MaxLength(30)]
@@ -23,7 +23,7 @@ namespace WikY.Entities
         public DateTime DateModified { get; set; }
 
         [Required]
-        public string Content { get; set; } = "";
+        public string Content { get; set; } = string.Empty;
 
         public ICollection<Comment>? Comments { get; set; }
     }
