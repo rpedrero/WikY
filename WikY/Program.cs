@@ -22,6 +22,7 @@ builder.Services.AddAutoMapper(c =>
 
     c.CreateMap<Comment, CommentViewModel>();
     c.CreateMap<CommentViewModel, Comment>();
+    c.CreateMap<CommentCreateViewModel, Comment>();
 });
 
 var app = builder.Build();

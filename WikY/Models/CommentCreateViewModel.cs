@@ -2,10 +2,8 @@
 
 namespace WikY.Models
 {
-    public class CommentViewModel
+    public class CommentCreateViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(30)]
         public string Author { get; set; } = string.Empty;

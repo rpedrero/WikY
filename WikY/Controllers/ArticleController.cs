@@ -11,14 +11,12 @@ namespace WikY.Controllers
     {
         private ILogger<ArticleController> _logger;
         private IArticleBusiness _articleBusiness;
-        private ICommentBusiness _commentBusiness;
         private IMapper _mapper;
 
-        public ArticleController(ILogger<ArticleController> logger, IArticleBusiness articleBusiness, ICommentBusiness commentBusiness, IMapper mapper)
+        public ArticleController(ILogger<ArticleController> logger, IArticleBusiness articleBusiness, IMapper mapper)
         {
             _logger = logger;
             _articleBusiness = articleBusiness;
-            _commentBusiness = commentBusiness;
             _mapper = mapper;
         }
 

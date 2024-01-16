@@ -1,5 +1,10 @@
 ﻿@model ArticleViewModel
 
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}
+
 <div id="delete-article-modal" class="modal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -52,6 +57,12 @@
 </p>
 
 <partial name="_ArticleCommentsList" model="Model" />
+
+<hr />
+
+<h3>Create a comment</h3>
+
+<partial name="_CommentCreateForm" model="@(new CommentCreateViewModel { ArticleId = Model.Id })" />
 
 <script>
     function deleteArticle() {
