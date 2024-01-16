@@ -28,3 +28,8 @@ body {
 .article-comment {
     margin-bottom: 1em;
 }
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+}
