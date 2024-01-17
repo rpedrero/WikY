@@ -13,17 +13,17 @@ namespace WikY.Repositories
     {
         public ArticleDbRepository(WikYContext dbContext) : base(dbContext) { }
 
-        public override async Task<Article?> GetById(int id)
+        public override async Task<Article?> GetByIdAsync(int id)
         {
             return await _dbSet.Where(a => a.Id == id).Include(a => a.Comments).FirstOrDefaultAsync();
         }
 
-        public async Task<Article?> GetByTopic(string topic)
+        public async Task<Article?> GetByTopicAsync(string topic)
         {
             return await _dbSet.FirstOrDefaultAsync(a => a.Topic == topic);
         }
 
-        public async Task<Article?> GetLast()
+        public async Task<Article?> GetLastAsync()
         {
             return await _dbSet.OrderByDescending(a => a.DateCreated).FirstOrDefaultAsync();
         }

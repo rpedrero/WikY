@@ -19,19 +19,19 @@ namespace WikY.Business
             return _articleRepository.GetAll();
         }
 
-        public async Task<Article?> GetArticleById(int id)
+        public async Task<Article?> GetArticleByIdAsync(int id)
         {
-            return await _articleRepository.GetById(id);
+            return await _articleRepository.GetByIdAsync(id);
         }
 
-        public async Task<Article?> GetArticleByTopic(string topic)
+        public async Task<Article?> GetArticleByTopicAsync(string topic)
         {
-            return await _articleRepository.GetByTopic(topic);
+            return await _articleRepository.GetByTopicAsync(topic);
         }
 
-        public async Task<Article?> GetLastArticle()
+        public async Task<Article?> GetLastArticleAsync()
         {
-            return await _articleRepository.GetLast();
+            return await _articleRepository.GetLastAsync();
         }
 
         public IAsyncEnumerable<Article> FindArticle(string? topic, string? content, string? author)
@@ -39,9 +39,9 @@ namespace WikY.Business
             return _articleRepository.Find(topic, content, author);
         }
 
-        public async Task<bool> ExistsArticleWithTopic(string topic)
+        public async Task<bool> ExistsArticleWithTopicAsync(string topic)
         {
-            return (await _articleRepository.GetByTopic(topic)) is not null;
+            return (await _articleRepository.GetByTopicAsync(topic)) is not null;
         }
 
         private async Task ValidateArticle(Article article, bool checkTopicUnicity = true)
@@ -61,7 +61,7 @@ namespace WikY.Business
                 throw new DataValidationException("Topic is required.", nameof(article.Topic));
             }
 
-            if (checkTopicUnicity && await ExistsArticleWithTopic(article.Topic))
+            if (checkTopicUnicity && await ExistsArticleWithTopicAsync(article.Topic))
             {
                 throw new DataValidationException($"This topic is already used for another article.", nameof(article.Topic));
             }
@@ -72,19 +72,19 @@ namespace WikY.Business
             }
         }
 
-        public async Task<Article> CreateArticle(Article article)
+        public async Task<Article> CreateArticleAsync(Article article)
         {
             await ValidateArticle(article);
 
             article.DateCreated = DateTime.Now;
             article.DateModified = DateTime.Now;
 
-            return await _articleRepository.Create(article);
+            return await _articleRepository.CreateAsync(article);
         }
 
-        public async Task UpdateArticle(Article article)
+        public async Task UpdateArticleAsync(Article article)
         {
-            Article? articleInOldState = await GetArticleById(article.Id);
+            Article? articleInOldState = await GetArticleByIdAsync(article.Id);
             if (articleInOldState is null)
             {
                 throw new ArticleNotFoundException(article.Id);
@@ -94,12 +94,12 @@ namespace WikY.Business
 
             article.DateModified = DateTime.Now;
 
-            await _articleRepository.Update(articleInOldState, article);
+            await _articleRepository.UpdateAsync(articleInOldState, article);
         }
 
-        public async Task DeleteArticle(Article article)
+        public async Task DeleteArticleAsync(Article article)
         {
-            await _articleRepository.Delete(article);
+            await _articleRepository.DeleteAsync(article);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace WikY.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public virtual async Task<T> Create(T entity)
+        public virtual async Task<T> CreateAsync(T entity)
         {
             await _dbSet.AddAsync(entity);
 
@@ -27,7 +27,7 @@ namespace WikY.Repositories
             return await Task.FromResult(entity);
         }
 
-        public virtual async Task Delete(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             _dbSet.Remove(entity);
 
@@ -39,19 +39,19 @@ namespace WikY.Repositories
             return _dbSet.AsAsyncEnumerable();
         }
 
-        public virtual async Task<T?> GetById(ID id)
+        public virtual async Task<T?> GetByIdAsync(ID id)
         {
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual async Task Update(T entity)
+        public virtual async Task UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
 
             await _context.SaveChangesAsync();
         }
 
-        public virtual async Task Update(T oldEntity, T newEntity)
+        public virtual async Task UpdateAsync(T oldEntity, T newEntity)
         {
             _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
 

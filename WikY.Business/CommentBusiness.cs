@@ -14,7 +14,7 @@ namespace WikY.Business
             _commentRepository = commentRepository;
         }
 
-        public async Task CreateComment(Comment comment)
+        public async Task CreateCommentAsync(Comment comment)
         {
             if(string.IsNullOrWhiteSpace(comment.Author))
             {
@@ -28,17 +28,17 @@ namespace WikY.Business
 
             comment.DateCreated = DateTime.Now;
 
-            await _commentRepository.Create(comment);
+            await _commentRepository.CreateAsync(comment);
         }
 
-        public async Task<Comment?> GetCommentById(int id)
+        public async Task<Comment?> GetCommentByIdAsync(int id)
         {
-            return await _commentRepository.GetById(id);
+            return await _commentRepository.GetByIdAsync(id);
         }
 
-        public async Task DeleteComment(Comment comment)
+        public async Task DeleteCommentAsync(Comment comment)
         {
-            await _commentRepository.Delete(comment);
+            await _commentRepository.DeleteAsync(comment);
         }
     }
 }

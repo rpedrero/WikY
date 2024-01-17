@@ -9,8 +9,8 @@ namespace WikY.Repositories.Contracts
 {
     public interface IArticleRepository : IRepository<Article, int>
     {
-        Task<Article?> GetByTopic(string topic);
-        Task<Article?> GetLast();
+        Task<Article?> GetByTopicAsync(string topic);
+        Task<Article?> GetLastAsync();
         IAsyncEnumerable<Article> Find(string? topic, string? content, string? author);
     }
 }

@@ -22,7 +22,7 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> Index()
         {
-            Article? lastArticle = await _articleBusiness.GetLastArticle();
+            Article? lastArticle = await _articleBusiness.GetLastArticleAsync();
             
             return View(_mapper.Map<ArticleViewModel>(lastArticle));
         }

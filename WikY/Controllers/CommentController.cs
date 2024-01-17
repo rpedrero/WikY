@@ -24,7 +24,7 @@ namespace WikY.Controllers
         
         public async Task<IActionResult> CreateForArticle(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
             if (article is not null)
             {
                 return View(new CommentCreateViewModel { ArticleId = article.Id });
@@ -44,14 +44,14 @@ namespace WikY.Controllers
             {
                 Comment commentToCreate = _mapper.Map<Comment>(comment);
 
-                Article? article = await _articleBusiness.GetArticleById(comment.ArticleId);
+                Article? article = await _articleBusiness.GetArticleByIdAsync(comment.ArticleId);
                 if (article is not null)
                 {
                     commentToCreate.Article = article;
 
                     try
                     {
-                        await _commentBusiness.CreateComment(commentToCreate);
+                        await _commentBusiness.CreateCommentAsync(commentToCreate);
                     }
                     catch (DataValidationException ex)
                     {
@@ -90,14 +90,14 @@ namespace WikY.Controllers
             {
                 Comment commentToCreate = _mapper.Map<Comment>(comment);
 
-                Article? article = await _articleBusiness.GetArticleById(comment.ArticleId);
+                Article? article = await _articleBusiness.GetArticleByIdAsync(comment.ArticleId);
                 if (article is not null)
                 {
                     commentToCreate.Article = article;
 
                     try
                     {
-                        await _commentBusiness.CreateComment(commentToCreate);
+                        await _commentBusiness.CreateCommentAsync(commentToCreate);
                     }
                     catch (DataValidationException ex)
                     {
@@ -127,14 +127,14 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            Comment? comment = await _commentBusiness.GetCommentById(id);
+            Comment? comment = await _commentBusiness.GetCommentByIdAsync(id);
             if(comment is not null)
             {
                 int articleId = comment.ArticleId;
                 
                 try
                 {
-                    await _commentBusiness.DeleteComment(comment);
+                    await _commentBusiness.DeleteCommentAsync(comment);
                 }
                 catch(Exception ex)
                 {
@@ -160,12 +160,12 @@ namespace WikY.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteAjax(int id)
         {
-            Comment? comment = await _commentBusiness.GetCommentById(id);
+            Comment? comment = await _commentBusiness.GetCommentByIdAsync(id);
             if (comment is not null)
             {
                 try
                 {
-                    await _commentBusiness.DeleteComment(comment);
+                    await _commentBusiness.DeleteCommentAsync(comment);
                 }
                 catch (Exception ex)
                 {

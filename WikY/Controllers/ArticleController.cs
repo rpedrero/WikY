@@ -35,7 +35,7 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> View(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if(article is not null)
             {
@@ -62,7 +62,7 @@ namespace WikY.Controllers
                 Article createdArticle = _mapper.Map<Article>(article);
                 try
                 {
-                    await _articleBusiness.CreateArticle(createdArticle);
+                    await _articleBusiness.CreateArticleAsync(createdArticle);
                 }
                 catch(DataValidationException ex)
                 {
@@ -91,7 +91,7 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if (article is not null)
             {
@@ -112,7 +112,7 @@ namespace WikY.Controllers
             {
                 try
                 {
-                    await _articleBusiness.UpdateArticle(_mapper.Map<Article>(article));
+                    await _articleBusiness.UpdateArticleAsync(_mapper.Map<Article>(article));
                 }
                 catch (ArticleNotFoundException)
                 {
@@ -147,14 +147,14 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> CheckTopicUnicity(int id, string topic)
         {
-            Article? article = await _articleBusiness.GetArticleByTopic(topic);
+            Article? article = await _articleBusiness.GetArticleByTopicAsync(topic);
 
             return Json(article is null || (id != default && article.Id == id));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if (article is null)
             {
@@ -162,7 +162,7 @@ namespace WikY.Controllers
             }
             else
             {
-                await _articleBusiness.DeleteArticle(article);
+                await _articleBusiness.DeleteArticleAsync(article);
 
                 TempData["success"] = "The article has been successfully deleted.";
             }
@@ -173,7 +173,7 @@ namespace WikY.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteJson(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if (article is null)
             {
@@ -181,7 +181,7 @@ namespace WikY.Controllers
             }
             else
             {
-                await _articleBusiness.DeleteArticle(article);
+                await _articleBusiness.DeleteArticleAsync(article);
 
                 return Ok();
             }
