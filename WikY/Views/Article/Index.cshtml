@@ -41,7 +41,7 @@
     </p>
 </div>
 
-<table class="table" id="articles-table">
+<table class="table">
     <thead>
         <tr>
             <th scope="col">Topic</th>
@@ -52,7 +52,7 @@
             <th scope="col">Delete</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="articles-list">
         <partial name="_ArticlesList" model="Model"/>
     </tbody>
 </table>
@@ -98,7 +98,7 @@
     let searchByContentInputElement = $('#search-by-content-input');
     let searchByAuthorInputElement = $('#search-by-author-input');
 
-    let articlesTableElement = $('#articles-table');
+    let articlesTableElement = $('#articles-list');
 
     searchByTopicInputElement.on('input', onSearchFieldInput);
     searchByContentInputElement.on('input', onSearchFieldInput);
