@@ -1,0 +1,21 @@
+﻿@model IEnumerable<ArticleViewModel>
+
+@foreach (ArticleViewModel article in Model)
+{
+    <tr id="article-@article.Id">
+        <td><a asp-action="View" asp-route-id="@article.Id">@article.Topic</a></td>
+        <td>@article.Author</td>
+        <td>@article.DateCreated.ToShortDateString() at @article.DateCreated.ToShortTimeString()</td>
+        <td>@article.DateModified.ToShortDateString() at @article.DateModified.ToShortTimeString()</td>
+        <td>
+            <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@article.Id">
+                <i class="bi bi-pen-fill"></i>
+            </a>
+        </td>
+        <td>
+            <button type="button" class="btn btn-danger" onclick="showDeleteModal(@article.Id)">
+                <i class="bi bi-trash3-fill"></i>
+            </button>
+        </td>
+    </tr>
+}

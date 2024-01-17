@@ -1,7 +1,4 @@
-﻿@model ICollection<ArticleViewModel>
-
-@{
-}
+﻿@model IEnumerable<ArticleViewModel>
 
 <p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
 
@@ -23,6 +20,27 @@
     </div>
 </div>
 
+<div id="article-search-bar">
+    <p>
+        <label for="topic">
+            Topic:
+        </label>
+        <input type="text" name="topic" id="search-by-topic-input" />
+    </p>
+    <p>
+        <label for="content">
+            Content:
+        </label>
+        <input type="text" name="content" id="search-by-content-input" />
+    </p>
+    <p>
+        <label for="author">
+            Author:
+        </label>
+        <input type="text" name="author" id="search-by-author-input" />
+    </p>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -34,26 +52,8 @@
             <th scope="col">Delete</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (ArticleViewModel article in Model)
-        {
-            <tr id="article-@article.Id">
-                <td><a asp-action="View" asp-route-id="@article.Id">@article.Topic</a></td>
-                <td>@article.Author</td>
-                <td>@article.DateCreated.ToShortDateString() at @article.DateCreated.ToShortTimeString()</td>
-                <td>@article.DateModified.ToShortDateString() at @article.DateModified.ToShortTimeString()</td>
-                <td>
-                    <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@article.Id">
-                        <i class="bi bi-pen-fill"></i>
-                    </a>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-danger" onclick="showDeleteModal(@article.Id)">
-                        <i class="bi bi-trash3-fill"></i>
-                    </button>
-                </td>
-            </tr>
-        }
+    <tbody id="articles-list">
+        <partial name="_ArticlesList" model="Model"/>
     </tbody>
 </table>
 
@@ -91,6 +91,31 @@
 
         }).done(function () {
             unselectCurrentArticle();
+        });
+    }
+
+    let searchByTopicInputElement = $('#search-by-topic-input');
+    let searchByContentInputElement = $('#search-by-content-input');
+    let searchByAuthorInputElement = $('#search-by-author-input');
+
+    let articlesTableElement = $('#articles-list');
+
+    searchByTopicInputElement.on('input', onSearchFieldInput);
+    searchByContentInputElement.on('input', onSearchFieldInput);
+    searchByAuthorInputElement.on('input', onSearchFieldInput);
+
+    function onSearchFieldInput(e) {
+        $.ajax({
+            url: '/Article/SearchAjax/',
+            type: 'GET',
+            data: {
+                topic: searchByTopicInputElement.val(),
+                content: searchByContentInputElement.val(),
+                author: searchByAuthorInputElement.val(),
+            },
+            success: function (data) {
+                articlesTableElement.html(data);
+            }
         });
     }
 </script>
