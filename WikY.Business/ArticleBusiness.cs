@@ -44,7 +44,7 @@ namespace WikY.Business
             return (await _articleRepository.GetByTopicAsync(topic)) is not null;
         }
 
-        private async Task ValidateArticle(Article article, bool checkTopicUnicity = true)
+        private async Task ValidateArticleAsync(Article article, bool checkTopicUnicity = true)
         {
             if (string.IsNullOrWhiteSpace(article.Author))
             {
@@ -61,7 +61,8 @@ namespace WikY.Business
                 throw new DataValidationException("Topic is required.", nameof(article.Topic));
             }
 
-            if (checkTopicUnicity && await ExistsArticleWithTopicAsync(article.Topic))
+            Article? articleWithSameTopic = await _articleRepository.GetByTopicAsync(article.Topic);
+            if (articleWithSameTopic is not null && articleWithSameTopic.Id != article.Id)
             {
                 throw new DataValidationException($"This topic is already used for another article.", nameof(article.Topic));
             }
@@ -74,7 +75,7 @@ namespace WikY.Business
 
         public async Task<Article> CreateArticleAsync(Article article)
         {
-            await ValidateArticle(article);
+            await ValidateArticleAsync(article);
 
             article.DateCreated = DateTime.Now;
             article.DateModified = DateTime.Now;
@@ -84,17 +85,12 @@ namespace WikY.Business
 
         public async Task UpdateArticleAsync(Article article)
         {
-            Article? articleInOldState = await GetArticleByIdAsync(article.Id);
-            if (articleInOldState is null)
+            await ValidateArticleAsync(article);
+
+            if (!await _articleRepository.UpdateAsync(article.Id, article.Topic, article.Content, article.Author, null, DateTime.Now))
             {
                 throw new ArticleNotFoundException(article.Id);
             }
-            
-            await ValidateArticle(article, article.Topic != articleInOldState.Topic);
-
-            article.DateModified = DateTime.Now;
-
-            await _articleRepository.UpdateAsync(articleInOldState, article);
         }
 
         public async Task DeleteArticleAsync(Article article)

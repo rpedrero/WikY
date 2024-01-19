@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Query;
 using WikY.Entities;
 using WikY.Repositories.Contracts;
 
@@ -20,7 +16,7 @@ namespace WikY.Repositories
 
         public async Task<Article?> GetByTopicAsync(string topic)
         {
-            return await _dbSet.FirstOrDefaultAsync(a => a.Topic == topic);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(a => a.Topic == topic);
         }
 
         public async Task<Article?> GetLastAsync()
@@ -35,6 +31,47 @@ namespace WikY.Repositories
                                                             && EF.Functions.Like(a.Author, $"%{author}%"));
 
             return results.AsAsyncEnumerable();
+        }
+
+        public async Task<bool> UpdateAsync(int id, string? topic = null, string? content = null, string? author = null, DateTime? dateCreated = null, DateTime? dateModified = null)
+        {
+            int result = await _dbSet.Where(a => a.Id == id).ExecuteUpdateAsync(s => s.SetProperty(a => a.Topic, a => topic ?? a.Topic)
+                                                                                      .SetProperty(a => a.Content, a => content ?? a.Content)
+                                                                                      .SetProperty(a => a.Author, a => author ?? a.Author)
+                                                                                      .SetProperty(a => a.DateCreated, a => dateCreated ?? a.DateCreated)
+                                                                                      .SetProperty(a => a.DateModified, a => dateModified ?? a.DateModified));
+
+            return result > 0;
+        }
+
+        private SetPropertyCalls<Article> UpdateSetProperties(SetPropertyCalls<Article> setPropertyCalls, string? topic = null, string? content = null, string? author = null, DateTime? dateCreated = null, DateTime? dateModified = null)
+        {
+            if (topic is not null)
+            {
+                setPropertyCalls.SetProperty(a => a.Topic, topic);
+            }
+
+            if (content is not null)
+            {
+                setPropertyCalls.SetProperty(a => a.Content, content);
+            }
+
+            if (author is not null)
+            {
+                setPropertyCalls.SetProperty(a => a.Author, author);
+            }
+
+            if (dateCreated is not null)
+            {
+                setPropertyCalls.SetProperty(a => a.DateCreated, dateCreated);
+            }
+
+            if (dateModified is not null)
+            {
+                setPropertyCalls.SetProperty(a => a.DateModified, dateModified);
+            }
+
+            return setPropertyCalls;
         }
     }
 }

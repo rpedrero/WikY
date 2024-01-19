@@ -7,7 +7,7 @@ namespace WikY.Repositories
 {
     public class DbRepository<T, ID> : IRepository<T, ID> where T : class
     {
-        private readonly WikYContext _context;
+        protected readonly WikYContext _context;
 
         protected readonly DbSet<T> _dbSet;
 

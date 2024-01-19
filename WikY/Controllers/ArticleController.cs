@@ -55,7 +55,7 @@ namespace WikY.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ArticleViewModel article)
+        public async Task<IActionResult> Create(ArticleCreateViewModel article)
         {
             if(ModelState.IsValid)
             {
@@ -95,7 +95,7 @@ namespace WikY.Controllers
 
             if (article is not null)
             {
-                return View(_mapper.Map<ArticleViewModel>(article));
+                return View(_mapper.Map<ArticleEditViewModel>(article));
             }
             else
             {
@@ -106,7 +106,7 @@ namespace WikY.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ArticleViewModel article)
+        public async Task<IActionResult> Edit(ArticleEditViewModel article)
         {
             if (ModelState.IsValid)
             {
@@ -145,11 +145,11 @@ namespace WikY.Controllers
             }
         }
 
-        public async Task<IActionResult> CheckTopicUnicity(int id, string topic)
+        public async Task<IActionResult> CheckTopicUnicity(string topic, int? id = null)
         {
             Article? article = await _articleBusiness.GetArticleByTopicAsync(topic);
 
-            return Json(article is null || (id != default && article.Id == id));
+            return Json(article is null || (id is not null && article.Id == id));
         }
 
         public async Task<IActionResult> Delete(int id)
