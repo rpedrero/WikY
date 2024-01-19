@@ -145,11 +145,9 @@ namespace WikY.Controllers
             }
         }
 
-        public async Task<IActionResult> CheckTopicUnicity(string topic, int? id = null)
+        public async Task<IActionResult> CheckTopicUnicity(string topic, int id = default)
         {
-            Article? article = await _articleBusiness.GetArticleByTopicAsync(topic);
-
-            return Json(article is null || (id is not null && article.Id == id));
+            return Json(await _articleBusiness.CheckArticleTopicUnicity(topic, id));
         }
 
         public async Task<IActionResult> Delete(int id)

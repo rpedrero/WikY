@@ -39,12 +39,14 @@ namespace WikY.Business
             return _articleRepository.Find(topic, content, author);
         }
 
-        public async Task<bool> ExistsArticleWithTopicAsync(string topic)
+        public async Task<bool> CheckArticleTopicUnicity(string articleTopic, int articleId = default)
         {
-            return (await _articleRepository.GetByTopicAsync(topic)) is not null;
+            Article? articleWithSameTopic = await _articleRepository.GetByTopicAsync(articleTopic);
+
+            return articleWithSameTopic is null || articleWithSameTopic.Id == articleId;
         }
 
-        private async Task ValidateArticleAsync(Article article, bool checkTopicUnicity = true)
+        private async Task ValidateArticleAsync(Article article)
         {
             if (string.IsNullOrWhiteSpace(article.Author))
             {
@@ -61,8 +63,7 @@ namespace WikY.Business
                 throw new DataValidationException("Topic is required.", nameof(article.Topic));
             }
 
-            Article? articleWithSameTopic = await _articleRepository.GetByTopicAsync(article.Topic);
-            if (articleWithSameTopic is not null && articleWithSameTopic.Id != article.Id)
+            if (!await CheckArticleTopicUnicity(article.Topic, article.Id))
             {
                 throw new DataValidationException($"This topic is already used for another article.", nameof(article.Topic));
             }
