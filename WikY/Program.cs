@@ -20,6 +20,8 @@ builder.Services.AddAutoMapper(c =>
 {
     c.CreateMap<Article, ArticleViewModel>();
     c.CreateMap<ArticleViewModel, Article>();
+    c.CreateMap<Article, ArticleWithCommentsViewModel>();
+    c.CreateMap<ArticleWithCommentsViewModel, Article>().ForMember(articleViewModel => articleViewModel.Comments, opt => opt.MapFrom(article => article.Comments ?? new List<CommentViewModel>()));
     c.CreateMap<ArticleCreateViewModel, Article>();
     c.CreateMap<Article, ArticleEditViewModel>();
     c.CreateMap<ArticleEditViewModel, Article>();

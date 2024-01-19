@@ -39,7 +39,7 @@ namespace WikY.Controllers
 
             if(article is not null)
             {
-                return View(_mapper.Map<ArticleViewModel>(article));
+                return View(_mapper.Map<ArticleWithCommentsViewModel>(article));
             }
             else
             {
