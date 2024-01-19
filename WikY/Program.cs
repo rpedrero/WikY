@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using WikY.Business;
 using WikY.Business.Contracts;
 using WikY.Entities;
-using WikY.Models;
+using WikY.Models.Article;
+using WikY.Models.Comment;
 using WikY.Repositories;
 using WikY.Repositories.Contracts;
 

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
-using WikY.Models;
+using WikY.Models.Article;
 
 namespace WikY.Controllers
 {

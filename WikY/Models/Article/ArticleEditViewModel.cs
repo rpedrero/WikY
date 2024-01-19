@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace WikY.Models
+namespace WikY.Models.Article
 {
     public class ArticleEditViewModel
     {

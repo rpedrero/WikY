@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WikY.Models
+namespace WikY.Models.Comment
 {
     public class CommentCreateViewModel
     {

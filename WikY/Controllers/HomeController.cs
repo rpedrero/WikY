@@ -4,6 +4,7 @@ using System.Diagnostics;
 using WikY.Business.Contracts;
 using WikY.Entities;
 using WikY.Models;
+using WikY.Models.Article;
 
 namespace WikY.Controllers
 {
