@@ -43,35 +43,5 @@ namespace WikY.Repositories
 
             return result > 0;
         }
-
-        private SetPropertyCalls<Article> UpdateSetProperties(SetPropertyCalls<Article> setPropertyCalls, string? topic = null, string? content = null, string? author = null, DateTime? dateCreated = null, DateTime? dateModified = null)
-        {
-            if (topic is not null)
-            {
-                setPropertyCalls.SetProperty(a => a.Topic, topic);
-            }
-
-            if (content is not null)
-            {
-                setPropertyCalls.SetProperty(a => a.Content, content);
-            }
-
-            if (author is not null)
-            {
-                setPropertyCalls.SetProperty(a => a.Author, author);
-            }
-
-            if (dateCreated is not null)
-            {
-                setPropertyCalls.SetProperty(a => a.DateCreated, dateCreated);
-            }
-
-            if (dateModified is not null)
-            {
-                setPropertyCalls.SetProperty(a => a.DateModified, dateModified);
-            }
-
-            return setPropertyCalls;
-        }
     }
 }

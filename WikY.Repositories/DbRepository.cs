@@ -44,18 +44,11 @@ namespace WikY.Repositories
             return await _dbSet.FindAsync(id);
         }
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<bool> UpdateAsync(T entity)
         {
             _dbSet.Update(entity);
 
-            await _context.SaveChangesAsync();
-        }
-
-        public virtual async Task UpdateAsync(T oldEntity, T newEntity)
-        {
-            _context.Entry(oldEntity).CurrentValues.SetValues(newEntity);
-
-            await _context.SaveChangesAsync();
+            return (await _context.SaveChangesAsync()) > 1;
         }
     }
 }
