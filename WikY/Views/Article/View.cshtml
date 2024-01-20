@@ -97,37 +97,7 @@
 
 <h3>Create a comment (AJAX version)</h3>
 
-<div class="alert alert-danger hidden" id="ajax-global-form-error-placeholder" role="alert">
-</div>
-
-<form action="Comment/CreateForArticle" id="create-comment-ajaxversion-form">
-    <p>
-        <input type="hidden" value="@Model.Id" id="ajax-article-id-input" />
-    </p>
-    <p>
-        <label for="ajax-author">
-            <span>Author </span>
-            <span aria-label="required">*</span>
-            <span> :</span>
-        </label>
-        <input name="ajax-author" id="ajax-author-input" maxlength="30" />
-        <br />
-        <span class="validation-error hidden" id="ajax-author-validation"></span>
-    </p>
-    <p>
-        <label for="ajax-content">
-            <span>Content </span>
-            <span aria-label="required">*</span>
-            <span> :</span>
-        </label>
-        <textarea name="ajax-content" id="ajax-content-input" maxlength="1000"></textarea>
-        <br />
-        <span class="validation-error" id="ajax-content-validation"></span>
-    </p>
-    <p>
-        <button class="btn btn-primary" type="submit" id="ajax-submit-button">Submit</button>
-    </p>
-</form>
+<partial name="_CommentCreateAjaxForm" />
 
 <hr />
 
