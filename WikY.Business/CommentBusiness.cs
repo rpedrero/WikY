@@ -26,6 +26,11 @@ namespace WikY.Business
                 throw new DataValidationException("Author must have a maximum length of 30.", nameof(comment.Author));
             }
 
+            if (comment.Content.Length > 1000)
+            {
+                throw new DataValidationException("Content must have a maximum length of 1000.", nameof(comment.Content));
+            }
+
             comment.DateCreated = DateTime.Now;
 
             await _commentRepository.CreateAsync(comment);

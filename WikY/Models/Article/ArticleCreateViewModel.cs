@@ -19,6 +19,7 @@ namespace WikY.Models.Article
         public DateTime DateModified { get; set; }
 
         [Required]
+        [MaxLength(10000)]
         public string Content { get; set; } = string.Empty;
 
         public ICollection<CommentViewModel>? Comments { get; set; }

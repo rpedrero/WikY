@@ -15,7 +15,7 @@ namespace WikY.Entities
         public DateTime DateModified { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(1000)]
         public string Content { get; set; } = string.Empty;
         [Required]
         public int ArticleId { get; set; }

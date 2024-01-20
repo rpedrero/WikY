@@ -103,7 +103,7 @@
             <span aria-label="required">*</span>
             <span> :</span>
         </label>
-        <input name="ajax-author" id="ajax-author-input" />
+        <input name="ajax-author" id="ajax-author-input" maxlength="30" />
         <br/>
         <span class="validation-error hidden" id="ajax-author-validation"></span>
     </p>
@@ -113,7 +113,7 @@
             <span aria-label="required">*</span>
             <span> :</span>
         </label>
-        <textarea name="ajax-content" id="ajax-content-input"></textarea>
+        <textarea name="ajax-content" id="ajax-content-input" maxlength="1000"></textarea>
         <br />
         <span class="validation-error" id="ajax-content-validation"></span>
     </p>
@@ -265,6 +265,15 @@
         else {
             ajaxContentValidationElement.text(null);
             ajaxContentValidationElement.addClass('hidden');
+
+            if (e.target.value.length > 1000) {
+                ajaxContentValidationElement.text('The field Content must be a string or array type with a maximum length of \'1000\'.');
+                ajaxContentValidationElement.removeClass('hidden');
+            }
+            else {
+                ajaxContentValidationElement.text(null);
+                ajaxContentValidationElement.addClass('hidden');
+            }
         }
     });
 </script>

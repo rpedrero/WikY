@@ -13,7 +13,7 @@ namespace WikY.Models.Comment
         public DateTime DateModified { get; set; }
 
         [Required]
-        [MaxLength(100)]
+        [MaxLength(1000)]
         public string Content { get; set; } = string.Empty;
 
         public int ArticleId { get; set; }

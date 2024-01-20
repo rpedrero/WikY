@@ -58,6 +58,11 @@ namespace WikY.Business
                 throw new DataValidationException("Author must have a maximum length of 30.", nameof(article.Author));
             }
 
+            if (article.Content.Length > 10000)
+            {
+                throw new DataValidationException("Content must have a maximum length of 10000.", nameof(article.Content));
+            }
+
             if (string.IsNullOrWhiteSpace(article.Topic))
             {
                 throw new DataValidationException("Topic is required.", nameof(article.Topic));
