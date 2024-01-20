@@ -2,19 +2,14 @@
     keyboard: false
 });
 
-let modalArticleToDeleteTitleElement = $('#article-to-delete-title');
-
 let selectedArticleId = null;
 
 function unselectCurrentArticle() {
     selectedArticleId = null;
-    modalArticleToDeleteTitleElement.text('');
 }
 
 function showDeleteModal(articleId) {
     selectedArticleId = articleId;
-
-    modalArticleToDeleteTitleElement.text($('#article-' + articleId + '>td>a').text());
 
     articleDeleteModal.show();
 }

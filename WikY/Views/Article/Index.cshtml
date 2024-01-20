@@ -1,4 +1,5 @@
 ﻿@using WikY.Models.Article
+@using WikY.Models.Modal
 @model IEnumerable<ArticleViewModel>
 
 @section Scripts
@@ -9,44 +10,9 @@
 
 <p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
 
-<div id="delete-article-modal" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Delete article</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete article about topic: "<span id="article-to-delete-title"></span>"?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="deleteSelectedArticle()">Yes</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="unselectCurrentArticle()">No</button>
-            </div>
-        </div>
-    </div>
-</div>
+<partial name="_Modal" model="@(new ModalViewModel { Id = "delete-article-modal", Title = "Delete article", Body = "Are you sure you want yo delete this article?", OnYesJavascript = "deleteSelectedArticle()", OnNoJavascript = "unselectCurrentArticle()" })" />
 
-<div id="article-search-bar">
-    <p>
-        <label for="topic">
-            Topic:
-        </label>
-        <input type="text" name="topic" id="search-by-topic-input" />
-    </p>
-    <p>
-        <label for="content">
-            Content:
-        </label>
-        <input type="text" name="content" id="search-by-content-input" />
-    </p>
-    <p>
-        <label for="author">
-            Author:
-        </label>
-        <input type="text" name="author" id="search-by-author-input" />
-    </p>
-</div>
+<partial name="_ArticleSearchBar" />
 
 <table class="table">
     <thead>
