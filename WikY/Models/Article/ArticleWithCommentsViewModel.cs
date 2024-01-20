@@ -2,14 +2,8 @@
 
 namespace WikY.Models.Article
 {
-    public class ArticleWithCommentsViewModel
+    public class ArticleWithCommentsViewModel : ArticleViewModel
     {
-        public int Id { get; set; }
-        public string Topic { get; set; } = string.Empty;
-        public string Author { get; set; } = string.Empty;
-        public DateTime DateCreated { get; set; }
-        public DateTime DateModified { get; set; }
-        public string Content { get; set; } = string.Empty;
-        public ICollection<CommentViewModel> Comments { get; set; }
+        public ICollection<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
     }
 }
