@@ -2,7 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using WikY.Business;
 using WikY.Business.Contracts;
 using WikY.Entities;
-using WikY.Models;
+using WikY.Models.Article;
+using WikY.Models.Comment;
 using WikY.Repositories;
 using WikY.Repositories.Contracts;
 
@@ -19,6 +20,11 @@ builder.Services.AddAutoMapper(c =>
 {
     c.CreateMap<Article, ArticleViewModel>();
     c.CreateMap<ArticleViewModel, Article>();
+    c.CreateMap<Article, ArticleWithCommentsViewModel>();
+    c.CreateMap<ArticleWithCommentsViewModel, Article>();
+    c.CreateMap<ArticleCreateViewModel, Article>();
+    c.CreateMap<Article, ArticleEditViewModel>();
+    c.CreateMap<ArticleEditViewModel, Article>();
 
     c.CreateMap<Comment, CommentViewModel>();
     c.CreateMap<CommentViewModel, Comment>();

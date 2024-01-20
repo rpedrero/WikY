@@ -4,6 +4,7 @@ using System.Diagnostics;
 using WikY.Business.Contracts;
 using WikY.Entities;
 using WikY.Models;
+using WikY.Models.Article;
 
 namespace WikY.Controllers
 {
@@ -22,8 +23,8 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> Index()
         {
-            Article? lastArticle = await _articleBusiness.GetLastArticle();
-            
+            Article? lastArticle = await _articleBusiness.GetLastArticleAsync();
+
             return View(_mapper.Map<ArticleViewModel>(lastArticle));
         }
 

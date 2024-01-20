@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WikY.Entities
+namespace WikY.Models.Comment
 {
-    public class Comment
+    public class CommentCreateViewModel
     {
-        public int Id { get; set; }
-
         [Required]
         [MaxLength(30)]
         public string Author { get; set; } = string.Empty;
@@ -17,8 +15,7 @@ namespace WikY.Entities
         [Required]
         [MaxLength(1000)]
         public string Content { get; set; } = string.Empty;
-        [Required]
+
         public int ArticleId { get; set; }
-        public Article? Article { get; set; }
     }
 }

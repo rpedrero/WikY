@@ -4,8 +4,8 @@ namespace WikY.Business.Contracts
 {
     public interface ICommentBusiness
     {
-        public Task CreateComment(Comment comment);
-        public Task<Comment?> GetCommentById(int id);
-        public Task DeleteComment(Comment comment);
+        public Task CreateCommentAsync(Comment comment);
+        public Task<Comment?> GetCommentByIdAsync(int id);
+        public Task DeleteCommentAsync(Comment comment);
     }
 }

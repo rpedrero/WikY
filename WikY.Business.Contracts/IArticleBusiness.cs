@@ -5,13 +5,13 @@ namespace WikY.Business.Contracts
     public interface IArticleBusiness
     {
         IAsyncEnumerable<Article> GetAllArticles();
-        Task<Article?> GetArticleById(int id);
-        Task<Article?> GetArticleByTopic(string topic);
-        Task<Article?> GetLastArticle();
+        Task<Article?> GetArticleByIdAsync(int id);
+        Task<Article?> GetArticleByTopicAsync(string topic);
+        Task<Article?> GetLastArticleAsync();
         IAsyncEnumerable<Article> FindArticle(string? topic, string? content, string? author);
-        Task<bool> ExistsArticleWithTopic(string topic);
-        Task<Article> CreateArticle(Article article);
-        Task UpdateArticle(Article article);
-        Task DeleteArticle(Article article);
+        Task<bool> CheckArticleTopicUnicity(string articleTopic, int articleid = default);
+        Task<Article> CreateArticleAsync(Article article);
+        Task UpdateArticleAsync(Article article);
+        Task DeleteArticleAsync(Article article);
     }
 }

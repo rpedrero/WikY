@@ -1,19 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace WikY.Models
+﻿namespace WikY.Models.Comment
 {
-    public class CommentCreateViewModel
+    public class CommentViewModel
     {
-        [Required]
-        [MaxLength(30)]
+        public int Id { get; set; }
+
         public string Author { get; set; } = string.Empty;
 
         public DateTime DateCreated { get; set; }
 
         public DateTime DateModified { get; set; }
 
-        [Required]
-        [MaxLength(100)]
         public string Content { get; set; } = string.Empty;
 
         public int ArticleId { get; set; }

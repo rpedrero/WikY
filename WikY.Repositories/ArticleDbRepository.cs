@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WikY.Entities;
 using WikY.Repositories.Contracts;
 
@@ -13,17 +8,17 @@ namespace WikY.Repositories
     {
         public ArticleDbRepository(WikYContext dbContext) : base(dbContext) { }
 
-        public override async Task<Article?> GetById(int id)
+        public override async Task<Article?> GetByIdAsync(int id)
         {
             return await _dbSet.Where(a => a.Id == id).Include(a => a.Comments).FirstOrDefaultAsync();
         }
 
-        public async Task<Article?> GetByTopic(string topic)
+        public async Task<Article?> GetByTopicAsync(string topic)
         {
-            return await _dbSet.FirstOrDefaultAsync(a => a.Topic == topic);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(a => a.Topic == topic);
         }
 
-        public async Task<Article?> GetLast()
+        public async Task<Article?> GetLastAsync()
         {
             return await _dbSet.OrderByDescending(a => a.DateCreated).FirstOrDefaultAsync();
         }
@@ -35,6 +30,17 @@ namespace WikY.Repositories
                                                             && EF.Functions.Like(a.Author, $"%{author}%"));
 
             return results.AsAsyncEnumerable();
+        }
+
+        public async Task<bool> UpdateAsync(int id, string? topic = null, string? content = null, string? author = null, DateTime? dateCreated = null, DateTime? dateModified = null)
+        {
+            int result = await _dbSet.Where(a => a.Id == id).ExecuteUpdateAsync(s => s.SetProperty(a => a.Topic, a => topic ?? a.Topic)
+                                                                                      .SetProperty(a => a.Content, a => content ?? a.Content)
+                                                                                      .SetProperty(a => a.Author, a => author ?? a.Author)
+                                                                                      .SetProperty(a => a.DateCreated, a => dateCreated ?? a.DateCreated)
+                                                                                      .SetProperty(a => a.DateModified, a => dateModified ?? a.DateModified));
+
+            return result > 0;
         }
     }
 }

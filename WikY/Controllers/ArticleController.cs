@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
-using WikY.Models;
+using WikY.Models.Article;
 
 namespace WikY.Controllers
 {
@@ -35,16 +35,16 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> View(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
-            if(article is not null)
+            if (article is not null)
             {
-                return View(_mapper.Map<ArticleViewModel>(article));
+                return View(_mapper.Map<ArticleWithCommentsViewModel>(article));
             }
             else
             {
                 TempData["error"] = "Article not found.";
-                
+
                 return RedirectToAction("Index");
             }
         }
@@ -55,27 +55,27 @@ namespace WikY.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ArticleViewModel article)
+        public async Task<IActionResult> Create(ArticleCreateViewModel article)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 Article createdArticle = _mapper.Map<Article>(article);
                 try
                 {
-                    await _articleBusiness.CreateArticle(createdArticle);
+                    await _articleBusiness.CreateArticleAsync(createdArticle);
                 }
-                catch(DataValidationException ex)
+                catch (DataValidationException ex)
                 {
                     ModelState.AddModelError(ex.FieldName, ex.Message);
 
                     return View(article);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
 
                     TempData["error"] = "An error occurred when attempting to create article. Try again later.";
-                    
+
                     return View(article);
                 }
 
@@ -91,11 +91,11 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if (article is not null)
             {
-                return View(_mapper.Map<ArticleViewModel>(article));
+                return View(_mapper.Map<ArticleEditViewModel>(article));
             }
             else
             {
@@ -106,13 +106,13 @@ namespace WikY.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(ArticleViewModel article)
+        public async Task<IActionResult> Edit(ArticleEditViewModel article)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _articleBusiness.UpdateArticle(_mapper.Map<Article>(article));
+                    await _articleBusiness.UpdateArticleAsync(_mapper.Map<Article>(article));
                 }
                 catch (ArticleNotFoundException)
                 {
@@ -145,16 +145,14 @@ namespace WikY.Controllers
             }
         }
 
-        public async Task<IActionResult> CheckTopicUnicity(int id, string topic)
+        public async Task<IActionResult> CheckTopicUnicity(string topic, int id = default)
         {
-            Article? article = await _articleBusiness.GetArticleByTopic(topic);
-
-            return Json(article is null || (id != default && article.Id == id));
+            return Json(await _articleBusiness.CheckArticleTopicUnicity(topic, id));
         }
 
         public async Task<IActionResult> Delete(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if (article is null)
             {
@@ -162,7 +160,7 @@ namespace WikY.Controllers
             }
             else
             {
-                await _articleBusiness.DeleteArticle(article);
+                await _articleBusiness.DeleteArticleAsync(article);
 
                 TempData["success"] = "The article has been successfully deleted.";
             }
@@ -173,7 +171,7 @@ namespace WikY.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteJson(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
             if (article is null)
             {
@@ -181,7 +179,7 @@ namespace WikY.Controllers
             }
             else
             {
-                await _articleBusiness.DeleteArticle(article);
+                await _articleBusiness.DeleteArticleAsync(article);
 
                 return Ok();
             }
@@ -190,11 +188,11 @@ namespace WikY.Controllers
         public async Task<IActionResult> SearchAjax(string? topic, string? content, string? author)
         {
             ICollection<ArticleViewModel> results = new List<ArticleViewModel>();
-            await foreach(Article article in _articleBusiness.FindArticle(topic, content, author))
+            await foreach (Article article in _articleBusiness.FindArticle(topic, content, author))
             {
                 results.Add(_mapper.Map<ArticleViewModel>(article));
             }
-            
+
             return PartialView("_ArticlesList", results);
         }
     }

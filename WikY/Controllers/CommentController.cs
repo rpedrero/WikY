@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WikY.Business.Contracts;
 using WikY.Business.Exceptions;
 using WikY.Entities;
-using WikY.Models;
+using WikY.Models.Comment;
 
 namespace WikY.Controllers
 {
@@ -21,10 +21,10 @@ namespace WikY.Controllers
             _commentBusiness = commentBusiness;
             _mapper = mapper;
         }
-        
+
         public async Task<IActionResult> CreateForArticle(int id)
         {
-            Article? article = await _articleBusiness.GetArticleById(id);
+            Article? article = await _articleBusiness.GetArticleByIdAsync(id);
             if (article is not null)
             {
                 return View(new CommentCreateViewModel { ArticleId = article.Id });
@@ -44,14 +44,14 @@ namespace WikY.Controllers
             {
                 Comment commentToCreate = _mapper.Map<Comment>(comment);
 
-                Article? article = await _articleBusiness.GetArticleById(comment.ArticleId);
+                Article? article = await _articleBusiness.GetArticleByIdAsync(comment.ArticleId);
                 if (article is not null)
                 {
                     commentToCreate.Article = article;
 
                     try
                     {
-                        await _commentBusiness.CreateComment(commentToCreate);
+                        await _commentBusiness.CreateCommentAsync(commentToCreate);
                     }
                     catch (DataValidationException ex)
                     {
@@ -90,14 +90,14 @@ namespace WikY.Controllers
             {
                 Comment commentToCreate = _mapper.Map<Comment>(comment);
 
-                Article? article = await _articleBusiness.GetArticleById(comment.ArticleId);
+                Article? article = await _articleBusiness.GetArticleByIdAsync(comment.ArticleId);
                 if (article is not null)
                 {
                     commentToCreate.Article = article;
 
                     try
                     {
-                        await _commentBusiness.CreateComment(commentToCreate);
+                        await _commentBusiness.CreateCommentAsync(commentToCreate);
                     }
                     catch (DataValidationException ex)
                     {
@@ -127,24 +127,24 @@ namespace WikY.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            Comment? comment = await _commentBusiness.GetCommentById(id);
-            if(comment is not null)
+            Comment? comment = await _commentBusiness.GetCommentByIdAsync(id);
+            if (comment is not null)
             {
                 int articleId = comment.ArticleId;
-                
+
                 try
                 {
-                    await _commentBusiness.DeleteComment(comment);
+                    await _commentBusiness.DeleteCommentAsync(comment);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
-                    
+
                     TempData["error"] = "An unexpected error has occurred when attempting to delete the comment. Try again later.";
 
                     return RedirectToAction("View", "Article", new { Id = articleId });
                 }
-                
+
                 TempData["success"] = "The comment has been successfully deleted.";
 
                 return RedirectToAction("View", "Article", new { Id = articleId });
@@ -160,12 +160,12 @@ namespace WikY.Controllers
         [HttpDelete]
         public async Task<IActionResult> DeleteAjax(int id)
         {
-            Comment? comment = await _commentBusiness.GetCommentById(id);
+            Comment? comment = await _commentBusiness.GetCommentByIdAsync(id);
             if (comment is not null)
             {
                 try
                 {
-                    await _commentBusiness.DeleteComment(comment);
+                    await _commentBusiness.DeleteCommentAsync(comment);
                 }
                 catch (Exception ex)
                 {
