@@ -1,6 +1,12 @@
 ﻿@using WikY.Models.Article
 @model IEnumerable<ArticleViewModel>
 
+@section Scripts
+{
+    <script src="~/js/delete_article_from_list.js" defer></script>
+    <script src="~/js/search_articles.js" defer></script>
+}
+
 <p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
 
 <div id="delete-article-modal" class="modal" tabindex="-1">
@@ -54,69 +60,8 @@
         </tr>
     </thead>
     <tbody id="articles-list">
-        <partial name="_ArticlesList" model="Model"/>
+        <partial name="_ArticlesList" model="Model" />
     </tbody>
 </table>
 
 <p><a class="btn btn-primary" asp-action="Create" role="button">Create article</a></p>
-
-<script>
-    let deleteModal = new bootstrap.Modal(document.getElementById('delete-article-modal'), {
-        keyboard: false
-    });
-
-    let modalArticleToDeleteTitleElement = $('#article-to-delete-title');
-
-    let selectedArticleId = null;
-
-    function showDeleteModal(articleId) {
-        selectedArticleId = articleId;
-
-        modalArticleToDeleteTitleElement.text($('#article-' + articleId + '>td>a').text());
-
-        deleteModal.show();
-    }
-
-    function unselectCurrentArticle() {
-        selectedArticleId = null;
-        modalArticleToDeleteTitleElement.text('');
-    }
-
-    function deleteSelectedArticle() {
-        $.ajax({
-            url: '/Article/DeleteJson/' + selectedArticleId,
-            type: 'DELETE',
-            success: function (result) {
-                $('#article-' + selectedArticleId).remove();
-            },
-
-        }).done(function () {
-            unselectCurrentArticle();
-        });
-    }
-
-    let searchByTopicInputElement = $('#search-by-topic-input');
-    let searchByContentInputElement = $('#search-by-content-input');
-    let searchByAuthorInputElement = $('#search-by-author-input');
-
-    let articlesTableElement = $('#articles-list');
-
-    searchByTopicInputElement.on('input', onSearchFieldInput);
-    searchByContentInputElement.on('input', onSearchFieldInput);
-    searchByAuthorInputElement.on('input', onSearchFieldInput);
-
-    function onSearchFieldInput(e) {
-        $.ajax({
-            url: '/Article/SearchAjax/',
-            type: 'GET',
-            data: {
-                topic: searchByTopicInputElement.val(),
-                content: searchByContentInputElement.val(),
-                author: searchByAuthorInputElement.val(),
-            },
-            success: function (data) {
-                articlesTableElement.html(data);
-            }
-        });
-    }
-</script>

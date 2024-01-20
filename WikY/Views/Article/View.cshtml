@@ -5,6 +5,10 @@
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/delete_article_from_view.js" defer></script>
+    <script src="~/js/delete_article_comment.js" defer></script>
+    <script src="~/js/delete_article_comment_ajax.js" defer></script>
+    <script src="~/js/add_article_comment_ajax_form.js" defer></script>
 }
 
 <div id="delete-article-modal" class="modal" tabindex="-1">
@@ -18,7 +22,7 @@
                 <p>Are you sure you want to delete this article?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="deleteArticle()">Yes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="deleteArticle(@Model.Id)">Yes</button>
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
             </div>
         </div>
@@ -98,13 +102,16 @@
 
 <form action="Comment/CreateForArticle" id="create-comment-ajaxversion-form">
     <p>
+        <input type="hidden" value="@Model.Id" id="ajax-article-id-input" />
+    </p>
+    <p>
         <label for="ajax-author">
             <span>Author </span>
             <span aria-label="required">*</span>
             <span> :</span>
         </label>
         <input name="ajax-author" id="ajax-author-input" maxlength="30" />
-        <br/>
+        <br />
         <span class="validation-error hidden" id="ajax-author-validation"></span>
     </p>
     <p>
@@ -137,143 +144,3 @@
         <p id="no-comment">No comment for now on this article.</p>
     }
 </div>
-
-<script>
-    let commentDeleteModal = new bootstrap.Modal(document.getElementById('delete-comment-modal'), {
-        keyboard: false
-    });
-
-    let commentDeleteAjaxModal = new bootstrap.Modal(document.getElementById('delete-comment-ajax-modal'), {
-        keyboard: false
-    });
-
-    let selectedCommentId = null;
-
-    function unselectCurrentComment() {
-        selectedCommentId = null;
-    }
-
-    function deleteArticle() {
-        window.location.href = '/Article/Delete/@Model.Id';
-    }
-
-    function deleteComment() {
-        window.location.href = '/Comment/Delete/' + selectedCommentId;
-    }
-
-    function deleteCommentAjax() {
-        $.ajax({
-            url: '/Comment/DeleteAjax/' + selectedCommentId,
-            type: 'DELETE',
-            success: function (result) {
-                $('#comment-' + selectedCommentId).remove();
-            },
-        }).done(function () {
-            unselectCurrentComment();
-        });
-    }
-
-    function onCommentDeleteButton(commentId) {
-        selectedCommentId = commentId;
-
-        commentDeleteModal.show();
-    }
-
-    function onCommentAjaxDeleteButton(commentId) {
-        selectedCommentId = commentId;
-
-        commentDeleteAjaxModal.show();
-    }
-
-    let globalFormErrorElement = $('#ajax-global-form-error-placeholder');
-
-    let authorInputElement = $('#ajax-author-input');
-    let contentInputElement = $('#ajax-content-input');
-
-    let ajaxAuthorValidationElement = $('#ajax-author-validation');
-    let ajaxContentValidationElement = $('#ajax-content-validation');
-
-    $('#create-comment-ajaxversion-form').submit(function (e) {
-        e.preventDefault();
-
-        $.post('/Comment/CreateAjax',
-            {
-                ArticleId: @Model.Id,
-                Author: authorInputElement.val(),
-                Content: contentInputElement.val()
-            },
-            function (data) {
-                let noCommentTextElement = $('#no-comment');
-                if (noCommentTextElement) {
-                    noCommentTextElement.remove();
-                }
-
-                $('#article-comments').prepend(data);
-
-                authorInputElement.val(null);
-                contentInputElement.val(null);
-
-                globalFormErrorElement.children().remove();
-                globalFormErrorElement.addClass('hidden');
-            })
-            .fail(function (response) {
-                if (response.status === 400) {
-                    let responseJSON = response.responseJSON;
-
-                    if (responseJSON['Author']) {
-                        ajaxAuthorValidationElement.text(responseJSON['Author']);
-                        ajaxAuthorValidationElement.removeClass('hidden');
-                    }
-
-                    if (responseJSON['Content']) {
-                        ajaxContentValidationElement.text(responseJSON['Content']);
-                        ajaxContentValidationElement.removeClass('hidden');
-                    }
-                }
-                else if (response.status === 500) {
-                    globalFormErrorElement.append('<p>An unexpected error has occurred when attempting to send your comment. Try again later.</p>');
-                    globalFormErrorElement.removeClass('hidden');
-                }
-            });
-    });
-
-    authorInputElement.on('input', function (e) {
-        if (!e.target.value.trim()) {
-            ajaxAuthorValidationElement.text('The Author field is required.');
-            ajaxAuthorValidationElement.removeClass('hidden');
-        }
-        else {
-            ajaxAuthorValidationElement.text(null);
-            ajaxAuthorValidationElement.addClass('hidden');
-        }
-
-        if(e.target.value.length > 30) {
-            ajaxAuthorValidationElement.text('The field Author must be a string or array type with a maximum length of \'30\'.');
-            ajaxAuthorValidationElement.removeClass('hidden');
-        }
-        else {
-            ajaxAuthorValidationElement.text(null);
-            ajaxAuthorValidationElement.addClass('hidden');
-        }
-    });
-
-    contentInputElement.on('input', function (e) {
-        if (!e.target.value.trim()) {
-            ajaxContentValidationElement.text('The Content field is required.');
-            ajaxContentValidationElement.removeClass('hidden');
-        }
-        else {
-            ajaxContentValidationElement.text(null);
-            ajaxContentValidationElement.addClass('hidden');
-
-            if (e.target.value.length > 1000) {
-                ajaxContentValidationElement.text('The field Content must be a string or array type with a maximum length of \'1000\'.');
-                ajaxContentValidationElement.removeClass('hidden');
-            }
-            else {
-                ajaxContentValidationElement.text(null);
-                ajaxContentValidationElement.addClass('hidden');
-            }
-        }
-    });
-</script>
