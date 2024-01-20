@@ -37,14 +37,14 @@ namespace WikY.Controllers
         {
             Article? article = await _articleBusiness.GetArticleByIdAsync(id);
 
-            if(article is not null)
+            if (article is not null)
             {
                 return View(_mapper.Map<ArticleWithCommentsViewModel>(article));
             }
             else
             {
                 TempData["error"] = "Article not found.";
-                
+
                 return RedirectToAction("Index");
             }
         }
@@ -57,25 +57,25 @@ namespace WikY.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ArticleCreateViewModel article)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 Article createdArticle = _mapper.Map<Article>(article);
                 try
                 {
                     await _articleBusiness.CreateArticleAsync(createdArticle);
                 }
-                catch(DataValidationException ex)
+                catch (DataValidationException ex)
                 {
                     ModelState.AddModelError(ex.FieldName, ex.Message);
 
                     return View(article);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
 
                     TempData["error"] = "An error occurred when attempting to create article. Try again later.";
-                    
+
                     return View(article);
                 }
 
@@ -188,11 +188,11 @@ namespace WikY.Controllers
         public async Task<IActionResult> SearchAjax(string? topic, string? content, string? author)
         {
             ICollection<ArticleViewModel> results = new List<ArticleViewModel>();
-            await foreach(Article article in _articleBusiness.FindArticle(topic, content, author))
+            await foreach (Article article in _articleBusiness.FindArticle(topic, content, author))
             {
                 results.Add(_mapper.Map<ArticleViewModel>(article));
             }
-            
+
             return PartialView("_ArticlesList", results);
         }
     }

@@ -2,6 +2,10 @@
 @using WikY.Models.Modal
 @model IEnumerable<ArticleViewModel>
 
+@{
+    ViewData["Title"] = "Articles list";
+}
+
 @section Scripts
 {
     <script src="~/js/delete_article_from_list.js" defer></script>

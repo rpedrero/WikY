@@ -21,7 +21,7 @@ namespace WikY.Controllers
             _commentBusiness = commentBusiness;
             _mapper = mapper;
         }
-        
+
         public async Task<IActionResult> CreateForArticle(int id)
         {
             Article? article = await _articleBusiness.GetArticleByIdAsync(id);
@@ -128,23 +128,23 @@ namespace WikY.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             Comment? comment = await _commentBusiness.GetCommentByIdAsync(id);
-            if(comment is not null)
+            if (comment is not null)
             {
                 int articleId = comment.ArticleId;
-                
+
                 try
                 {
                     await _commentBusiness.DeleteCommentAsync(comment);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     _logger.LogError(ex.Message);
-                    
+
                     TempData["error"] = "An unexpected error has occurred when attempting to delete the comment. Try again later.";
 
                     return RedirectToAction("View", "Article", new { Id = articleId });
                 }
-                
+
                 TempData["success"] = "The comment has been successfully deleted.";
 
                 return RedirectToAction("View", "Article", new { Id = articleId });

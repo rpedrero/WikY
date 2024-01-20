@@ -3,6 +3,10 @@
 @using WikY.Models.Modal
 @model ArticleWithCommentsViewModel
 
+@{
+    ViewData["Title"] = Model.Topic;
+}
+
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />

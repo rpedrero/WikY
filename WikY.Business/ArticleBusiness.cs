@@ -8,7 +8,7 @@ namespace WikY.Business
     public class ArticleBusiness : IArticleBusiness
     {
         private IArticleRepository _articleRepository;
-        
+
         public ArticleBusiness(IArticleRepository articleRepository)
         {
             _articleRepository = articleRepository;

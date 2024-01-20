@@ -1,6 +1,4 @@
-﻿using WikY.Models.Comment;
-
-namespace WikY.Models.Article
+﻿namespace WikY.Models.Article
 {
     public class ArticleViewModel
     {

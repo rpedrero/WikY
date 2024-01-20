@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WikY.Business.Exceptions
+﻿namespace WikY.Business.Exceptions
 {
     public class ArticleNotFoundException : Exception
     {

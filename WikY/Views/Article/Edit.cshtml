@@ -1,6 +1,10 @@
 ﻿@using WikY.Models.Article
 @model ArticleEditViewModel
 
+@{
+    ViewData["Title"] = $"{Model.Topic} - Edit article";
+}
+
 @section Scripts
 {
     <partial name="_ValidationScriptsPartial" />
@@ -11,7 +15,7 @@
 <form asp-action="Edit" id="article-edit-form">
     <p class="hidden">
         <input type="hidden" asp-for="Id" />
-    </p>    
+    </p>
     <p>
         <label asp-for="Author">
             <span>Author </span>
