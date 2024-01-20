@@ -1,7 +1,7 @@
 ﻿@using WikY.Models.Article
 @model IEnumerable<ArticleViewModel>
 
-@foreach (ArticleViewModel article in Model)
+@foreach (ArticleViewModel article in Model.OrderByDescending(a => a.DateCreated))
 {
     <tr id="article-@article.Id">
         <td><a asp-action="View" asp-route-id="@article.Id">@article.Topic</a></td>
